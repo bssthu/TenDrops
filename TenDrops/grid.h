@@ -26,7 +26,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void setDropSize(int size);
-    int getDropSize();
+    int dropSize();
     // ¼ÓÒ»µÎË®
     void addDrop();
 
@@ -51,7 +51,7 @@ private:
     static QImage img[];
     int idX, idY;
     QRectF rect;
-    int dropSize;
+    int dropSize_;
 };
 
 #endif // GRID_H

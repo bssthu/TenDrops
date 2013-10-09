@@ -27,7 +27,7 @@ Grid::Grid(int x, int y)
     , idX(x)
     , idY(y)
     , rect(GRID_SX + GRID_DX * x - WIDTH * 0.5f, GRID_SY + GRID_DY * y - WIDTH * 0.5f, WIDTH, WIDTH)
-    , dropSize(0)
+    , dropSize_(0)
 {
 }
 
@@ -38,7 +38,7 @@ QRectF Grid::boundingRect() const
 
 void Grid::paint(QPainter *painter, const QStyleOptionGraphicsItem */*option*/, QWidget */*widget*/)
 {
-    painter->drawImage(boundingRect(), img[dropSize]);
+    painter->drawImage(boundingRect(), img[dropSize_]);
 }
 
 void Grid::setDropSize(int size)
@@ -51,24 +51,24 @@ void Grid::setDropSize(int size)
     {
         size = MAX_DROP_SIZE;
     }
-    dropSize = size;
+    dropSize_ = size;
 }
 
-int Grid::getDropSize()
+int Grid::dropSize()
 {
-    return dropSize;
+    return dropSize_;
 }
 
 void Grid::addDrop()
 {
-    if (dropSize >= MAX_DROP_SIZE)
+    if (dropSize_ >= MAX_DROP_SIZE)
     {
-        dropSize = 0;
+        dropSize_ = 0;
         emit burst(idX, idY);
     }
     else
     {
-        dropSize++;
+        dropSize_++;
     }
 }
 

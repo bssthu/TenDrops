@@ -32,6 +32,7 @@ void MainWindow::InitUI()
     setWindowIcon(QIcon("://Data//icon.ico"));
     QGraphicsScene* scene = new QGraphicsScene();
     ui->graphicsView->setScene(scene);
+    scene->addPixmap(QPixmap("://Data//Textures//background.png"));
     gameboard = new GameBoard(scene, this);
     connect(ui->graphicsView, &MyGraphicsView::clicked, gameboard, &GameBoard::onClicked);
     connect(gameboard, &GameBoard::updated, ui->graphicsView, &MyGraphicsView::invalidate);

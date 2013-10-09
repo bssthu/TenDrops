@@ -34,9 +34,9 @@ public slots:
 private:
     enum class UIMode
     {
-        FREE = 0,
-        MANUALRUN = 1,
-        AUTORUN = 2
+        FREE,
+        MANUALRUN,
+        AUTORUN
     };
     UIMode uiMode;
 };

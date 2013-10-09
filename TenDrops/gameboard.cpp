@@ -12,14 +12,15 @@
 #include <QGraphicsView>
 #include <QMessageBox>
 #include "grid.h"
+#include "drop.h"
 #include "Macro.h"
 
 GameBoard::GameBoard(QGraphicsScene *scene, QObject *parent)
     : QObject(parent)
     , scene(scene)
     , grids(new Grid*[36])
+    , drops()
 {
-    scene->addPixmap(QPixmap("://Data//Textures//background.png"));
     CreateGrids();
 }
 
@@ -45,6 +46,19 @@ void GameBoard::onClicked(const QPointF *point)
 void GameBoard::dropBurst(int x, int y)
 {
     emit beginRun();
+    Drop* drop = nullptr;
+    drop = new Drop(Drop::DropFrom::NORTH, x, y);
+    drops.push_back(drop);
+    scene->addItem(drop);
+    drop = new Drop(Drop::DropFrom::SOUTH, x, y);
+    drops.push_back(drop);
+    scene->addItem(drop);
+    drop = new Drop(Drop::DropFrom::WEST, x, y);
+    drops.push_back(drop);
+    scene->addItem(drop);
+    drop = new Drop(Drop::DropFrom::EAST, x, y);
+    drops.push_back(drop);
+    scene->addItem(drop);
 }
 
 void GameBoard::CreateGrids()
