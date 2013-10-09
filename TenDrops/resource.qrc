@@ -1,0 +1,10 @@
+<RCC>
+    <qresource>
+    <file>Data/icon.ico</file>
+    <file>Data/Textures/background.png</file>
+    <file>Data/Textures/water1.png</file>
+    <file>Data/Textures/water2.png</file>
+    <file>Data/Textures/water3.png</file>
+    <file>Data/Textures/water4.png</file>
+    </qresource>
+</RCC>
