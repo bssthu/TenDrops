@@ -11,12 +11,8 @@
 #ifndef DROP_H
 #define DROP_H
 
-#include <QGraphicsItem>
-
-class Drop : public QObject, public QGraphicsItem
+class Drop
 {
-    Q_OBJECT
-    Q_INTERFACES(QGraphicsItem)
 public:
     enum class DropFrom
     {
@@ -26,11 +22,7 @@ public:
         EAST = 3
     };
 
-    explicit Drop(DropFrom dropFrom, int x, int y);
-
-    QRectF boundingRect() const;
-
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    Drop(DropFrom dropFrom, int x, int y);
 
     int x();
     int y();
@@ -38,21 +30,8 @@ public:
 
     bool isDead();
 
-signals:
-
-public slots:
-
-private:
-    static const int WIDTH = 48;
-    static const int GRID_SX = 50;
-    static const int GRID_SY = 40;
-    static const int GRID_DX = 54;
-    static const int GRID_DY = 54;
-    static const float ROT[];
-
+protected:
     DropFrom dropFrom;
-    QImage img;
-    QRectF rect;
     int idX, idY;
     bool isDead_;
     bool isNew_;

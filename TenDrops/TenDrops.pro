@@ -17,14 +17,18 @@ SOURCES += main.cpp\
     grid.cpp \
     gameboard.cpp \
     mygraphicsview.cpp \
-    drop.cpp
+    drop.cpp \
+    dropgraphics.cpp \
+    gridgraphics.cpp
 
 HEADERS  += mainwindow.h \
     grid.h \
     gameboard.h \
     Macro.h \
     mygraphicsview.h \
-    drop.h
+    drop.h \
+    dropgraphics.h \
+    gridgraphics.h
 
 FORMS    += mainwindow.ui
 

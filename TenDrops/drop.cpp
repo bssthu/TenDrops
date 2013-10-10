@@ -9,41 +9,14 @@
 //
 
 #include "drop.h"
-#include <QPainter>
-
-const float Drop::ROT[] =
-{
-    0.0f,
-    180.0f,
-    -90.0f,
-    90.0f
-};
 
 Drop::Drop(DropFrom dropFrom, int x, int y)
-    : QObject(nullptr)
-    , QGraphicsItem()
-    , dropFrom(dropFrom)
-    , img("://Data//Textures//drop.png")
-    , rect(GRID_SX + GRID_DX * x - WIDTH * 0.5f, GRID_SY + GRID_DY * y - WIDTH * 0.5f, WIDTH, WIDTH)
+    : dropFrom(dropFrom)
     , idX(x)
     , idY(y)
     , isDead_(false)
     , isNew_(true)
 {
-    setTransformOriginPoint(rect.center());
-    setRotation(ROT[(int)dropFrom]);
-}
-
-QRectF Drop::boundingRect() const
-{
-    return rect;
-}
-
-void Drop::paint(QPainter *painter, const QStyleOptionGraphicsItem */*option*/, QWidget */*widget*/)
-{
-    QRectF r = rect;
-    r.adjust(0, 15, 0, 15);
-    painter->drawImage(r, img);
 }
 
 int Drop::x()
@@ -67,11 +40,6 @@ void Drop::step()
         isDead_ = true;
         return;
     }
-
-    resetTransform();
-    rect.setRect(GRID_SX + GRID_DX * idX - WIDTH * 0.5f, GRID_SY + GRID_DY * idY - WIDTH * 0.5f, WIDTH, WIDTH);
-    setTransformOriginPoint(rect.center());
-    setRotation(ROT[(int)dropFrom]);
 }
 
 bool Drop::isDead()

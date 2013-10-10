@@ -10,15 +10,14 @@
 
 #include "gameboard.h"
 #include <QGraphicsView>
-#include <QMessageBox>
-#include "grid.h"
-#include "drop.h"
+#include "gridgraphics.h"
+#include "dropgraphics.h"
 #include "Macro.h"
 
 GameBoard::GameBoard(QGraphicsScene *scene, QObject *parent)
     : QObject(parent)
     , scene(scene)
-    , grids(new Grid*[36])
+    , grids(new GridGraphics*[36])
     , drops()
 {
     createGrids();
@@ -33,8 +32,8 @@ GameBoard::~GameBoard()
 void GameBoard::onClicked(const QPointF *point)
 {
     // 判断格子
-    int i = Grid::getCoordX(point->x());
-    int j = Grid::getCoordY(point->y());
+    int i = GridGraphics::getCoordX(point->x());
+    int j = GridGraphics::getCoordY(point->y());
     if (i >= 0 && j >= 0)
     {
         // 加水
@@ -54,7 +53,7 @@ void GameBoard::createGrids()
     {
         for (int j = 0; j < 6; j++)
         {
-            grids[i * 6 + j] = new Grid(i, j);
+            grids[i * 6 + j] = new GridGraphics(i, j);
             scene->addItem(grids[i * 6 + j]);
         }
     }
@@ -78,23 +77,22 @@ void GameBoard::checkDropList()
 {
     for (int i = 0; i < 4; i++)
     {
-        for (std::list<Drop*>::iterator it = drops[i].begin(); it != drops[i].end(); )
+        for (std::list<DropGraphics*>::iterator it = drops[i].begin(); it != drops[i].end(); )
         {
-            (*it)->step();
+            DropGraphics* drop = *it;
+            drop->step();
             // 碰到边沿
             if ((*it)->isDead())
             {
                 // Remove
-                Drop* drop = *it;
                 scene->removeItem(drop);
                 it = drops[i].erase(it);
             }
             // 碰到水滴
-            else if (grids[(*it)->x() * 6 + (*it)->y()]->canAcceptDrop())
+            else if (grids[drop->Drop::x() * 6 + drop->Drop::y()]->canAcceptDrop())
             {
-                grids[(*it)->x() * 6 + (*it)->y()]->addDrop();
+                grids[drop->Drop::x() * 6 + drop->Drop::y()]->addDrop();
                 // Remove
-                Drop* drop = *it;
                 scene->removeItem(drop);
                 it = drops[i].erase(it);
             }
@@ -124,7 +122,7 @@ void GameBoard::addDrop(int x, int y)
 {
     for (int i = 0; i < 4; i++)
     {
-        Drop* drop = new Drop((Drop::DropFrom)i, x, y);
+        DropGraphics* drop = new DropGraphics((Drop::DropFrom)i, x, y);
         drops[i].push_back(drop);
         scene->addItem(drop);
     }

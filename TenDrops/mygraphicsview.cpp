@@ -55,7 +55,7 @@ void MyGraphicsView::beginManualRun()
     if (UIMode::FREE == uiMode)
     {
         uiMode = UIMode::MANUALRUN;
-        timer->start(1000);
+        timer->start(500);
     }
 }
 

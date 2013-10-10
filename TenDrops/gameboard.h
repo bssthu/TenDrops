@@ -15,8 +15,8 @@
 #include <list>
 
 class QGraphicsScene;
-class Grid;
-class Drop;
+class GridGraphics;
+class DropGraphics;
 
 class GameBoard : public QObject
 {
@@ -46,9 +46,9 @@ private:
 private:
     QGraphicsScene* scene;
     // 可以包含水珠的格子
-    Grid** grids;
+    GridGraphics** grids;
     // 飞行的水滴，按优先级排序
-    std::list<Drop*> drops[4];
+    std::list<DropGraphics*> drops[4];
 };
 
 #endif // GAMEBOARD_H
