@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-09
+// Last Modification: 2013-10-10
 // Description		: My QGraphicsView.
 //
 
@@ -12,6 +12,8 @@
 #define MYGRAPHICSVIEW_H
 
 #include <QGraphicsView>
+
+class GameBoard;
 
 class MyGraphicsView : public QGraphicsView
 {
@@ -32,6 +34,9 @@ public slots:
     void endAutoRun();
 
 private:
+    void initUI();
+
+private:
     enum class UIMode
     {
         FREE,
@@ -39,6 +44,8 @@ private:
         AUTORUN
     };
     UIMode uiMode;
+    GameBoard* gameboard;
+    QTimer* timer;
 };
 
 #endif // MYGRAPHICSVIEW_H

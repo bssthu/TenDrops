@@ -61,14 +61,25 @@ int Grid::dropSize()
 
 void Grid::addDrop()
 {
-    if (dropSize_ >= MAX_DROP_SIZE)
+    dropSize_++;
+}
+
+bool Grid::canAcceptDrop()
+{
+    return dropSize_ > 0 && dropSize_ <= MAX_DROP_SIZE;
+}
+
+// Ë®µÎ±¬Õ¨
+bool Grid::checkBurst()
+{
+    if (dropSize_ > MAX_DROP_SIZE)
     {
         dropSize_ = 0;
-        emit burst(idX, idY);
+        return true;
     }
     else
     {
-        dropSize_++;
+        return false;
     }
 }
 

@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-09
+// Last Modification: 2013-10-10
 // Description		: Game controller.
 //
 
@@ -35,17 +35,20 @@ signals:
 
 public slots:
     void onClicked(const QPointF* point);
-    void dropBurst(int x, int y);
+    void step();
 
 private:
-    void CreateGrids();
+    void createGrids();
+    void addDrop(int x, int y);
+    void checkDropList();
+    void checkBurst();
 
 private:
     QGraphicsScene* scene;
     // 可以包含水珠的格子
     Grid** grids;
-    // 飞行的水滴
-    std::list<Drop*> drops;
+    // 飞行的水滴，按优先级排序
+    std::list<Drop*> drops[4];
 };
 
 #endif // GAMEBOARD_H

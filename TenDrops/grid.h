@@ -29,13 +29,14 @@ public:
     int dropSize();
     // 加一滴水
     void addDrop();
+    bool canAcceptDrop();
+    // 水滴爆炸
+    bool checkBurst();
 
     static int getCoordX(float x);
     static int getCoordY(float y);
 
 signals:
-    // 水滴爆炸
-    void burst(int x, int y);
 
 public slots:
 

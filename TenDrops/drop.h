@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-09
+// Last Modification: 2013-10-10
 // Description		: A flying drop.
 //
 
@@ -20,10 +20,10 @@ class Drop : public QObject, public QGraphicsItem
 public:
     enum class DropFrom
     {
-        NORTH,
-        SOUTH,
-        WEST,
-        EAST
+        NORTH = 0,
+        SOUTH = 1,
+        WEST = 2,
+        EAST = 3
     };
 
     explicit Drop(DropFrom dropFrom, int x, int y);
@@ -36,6 +36,8 @@ public:
     int y();
     void step();
 
+    bool isDead();
+
 signals:
 
 public slots:
@@ -46,11 +48,14 @@ private:
     static const int GRID_SY = 40;
     static const int GRID_DX = 54;
     static const int GRID_DY = 54;
+    static const float ROT[];
 
     DropFrom dropFrom;
     QImage img;
     QRectF rect;
     int idX, idY;
+    bool isDead_;
+    bool isNew_;
 };
 
 #endif // DROP_H
