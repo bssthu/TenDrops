@@ -24,6 +24,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void step();
+    void move(float percent);
 
 private:
     static QImage img;
@@ -35,6 +36,7 @@ private:
     static const float ROT[];
 
     QRectF rect;
+    float movePercent;
 };
 
 #endif // DROPGRAPHICS_H

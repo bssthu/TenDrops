@@ -19,6 +19,7 @@ GameBoard::GameBoard(QGraphicsScene *scene, QObject *parent)
     , scene(scene)
     , grids(new GridGraphics*[36])
     , drops()
+    , moves(0)
 {
     createGrids();
 }
@@ -61,19 +62,27 @@ void GameBoard::createGrids()
 
 void GameBoard::step()
 {
-    checkDropList();
-    checkBurst();
-    if (drops[0].size() == 0
-            && drops[1].size() == 0
-            && drops[2].size() == 0
-            && drops[3].size() == 0)
+    if (++moves >= MAX_MOVE)
     {
-        emit endRound();
+        checkDrops();
+        checkBurst();
+        if (drops[0].size() == 0
+                && drops[1].size() == 0
+                && drops[2].size() == 0
+                && drops[3].size() == 0)
+        {
+            emit endRound();
+        }
+        moves = 0;
+    }
+    else
+    {
+        moveDrops(1.0f / (float)MAX_MOVE);
     }
     emit updated();
 }
 
-void GameBoard::checkDropList()
+void GameBoard::checkDrops()
 {
     for (int i = 0; i < 4; i++)
     {
@@ -114,6 +123,18 @@ void GameBoard::checkBurst()
             {
                 addDrop(i, j);
             }
+        }
+    }
+}
+
+void GameBoard::moveDrops(float percent)
+{
+    for (int i = 0; i < 4; i++)
+    {
+        for (std::list<DropGraphics*>::iterator it = drops[i].begin(); it != drops[i].end(); ++it)
+        {
+            DropGraphics* drop = *it;
+            drop->move(percent);
         }
     }
 }

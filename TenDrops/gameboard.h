@@ -40,8 +40,9 @@ public slots:
 private:
     void createGrids();
     void addDrop(int x, int y);
-    void checkDropList();
+    void checkDrops();
     void checkBurst();
+    void moveDrops(float percent);
 
 private:
     QGraphicsScene* scene;
@@ -49,6 +50,9 @@ private:
     GridGraphics** grids;
     // 飞行的水滴，按优先级排序
     std::list<DropGraphics*> drops[4];
+    // 动画相关
+    int moves;
+    static const int MAX_MOVE = 10;
 };
 
 #endif // GAMEBOARD_H
