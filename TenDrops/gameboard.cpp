@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-10
+// Last Modification: 2013-10-11
 // Description		:
 //
 
@@ -13,6 +13,7 @@
 #include "gridgraphics.h"
 #include "dropgraphics.h"
 #include "Macro.h"
+#include "mapreader.h"
 
 GameBoard::GameBoard(QGraphicsScene *scene, QObject *parent)
     : QObject(parent)
@@ -32,16 +33,16 @@ GameBoard::~GameBoard()
 
 void GameBoard::onClicked(const QPointF *point)
 {
-    // ÅÐ¶Ï¸ñ×Ó
-    int i = GridGraphics::getCoordX(point->x());
-    int j = GridGraphics::getCoordY(point->y());
-    if (i >= 0 && j >= 0)
+    // åˆ¤æ–­æ ¼å­
+    int x = GridGraphics::getCoordX(point->x());
+    int y = GridGraphics::getCoordY(point->y());
+    if (x >= 0 && y >= 0)
     {
-        // ¼ÓË®
-        grids[i * 6 + j]->addDrop();
-        if (grids[i * 6 + j]->checkBurst())
+        // åŠ æ°´
+        grids[y * 6 + x]->addDrop();
+        if (grids[y * 6 + x]->checkBurst())
         {
-            addDrop(i, j);
+            addDrop(x, y);
             emit beginRun();
         }
         emit updated();
@@ -50,12 +51,12 @@ void GameBoard::onClicked(const QPointF *point)
 
 void GameBoard::createGrids()
 {
-    for (int i = 0; i < 6; i++)
+    for (int x = 0; x < 6; x++)
     {
-        for (int j = 0; j < 6; j++)
+        for (int y = 0; y < 6; y++)
         {
-            grids[i * 6 + j] = new GridGraphics(i, j);
-            scene->addItem(grids[i * 6 + j]);
+            grids[y * 6 + x] = new GridGraphics(x, y);
+            scene->addItem(grids[y * 6 + x]);
         }
     }
 }
@@ -82,6 +83,35 @@ void GameBoard::step()
     emit updated();
 }
 
+void GameBoard::onLoadMap(const char* filename)
+{
+    int buffer[36];
+    if (MapReader::readMap(filename, buffer))
+    {
+        for (int x = 0; x < 6; x++)
+        {
+            for (int y = 0; y < 6; y++)
+            {
+                grids[y * 6 + x]->setDropSize(buffer[y * 6 + x]);
+            }
+        }
+    }
+    emit updated();
+}
+
+void GameBoard::onSaveMap()
+{
+    int buffer[36];
+    for (int x = 0; x < 6; x++)
+    {
+        for (int y = 0; y < 6; y++)
+        {
+            buffer[y * 6 + x] = grids[y * 6 + x]->dropSize();
+        }
+    }
+    MapReader::saveMap("Data//Maps//1.map", buffer);
+}
+
 void GameBoard::checkDrops()
 {
     for (int i = 0; i < 4; i++)
@@ -90,17 +120,17 @@ void GameBoard::checkDrops()
         {
             DropGraphics* drop = *it;
             drop->step();
-            // Åöµ½±ßÑØ
+            // ç¢°åˆ°è¾¹æ²¿
             if ((*it)->isDead())
             {
                 // Remove
                 scene->removeItem(drop);
                 it = drops[i].erase(it);
             }
-            // Åöµ½Ë®µÎ
-            else if (grids[drop->Drop::x() * 6 + drop->Drop::y()]->canAcceptDrop())
+            // ç¢°åˆ°æ°´æ»´
+            else if (grids[drop->Drop::y() * 6 + drop->Drop::x()]->canAcceptDrop())
             {
-                grids[drop->Drop::x() * 6 + drop->Drop::y()]->addDrop();
+                grids[drop->Drop::y() * 6 + drop->Drop::x()]->addDrop();
                 // Remove
                 scene->removeItem(drop);
                 it = drops[i].erase(it);
@@ -115,13 +145,13 @@ void GameBoard::checkDrops()
 
 void GameBoard::checkBurst()
 {
-    for (int i = 0; i < 6; i++)
+    for (int x = 0; x < 6; x++)
     {
-        for (int j = 0; j < 6; j++)
+        for (int y = 0; y < 6; y++)
         {
-            if (grids[i * 6 + j]->checkBurst())
+            if (grids[y * 6 + x]->checkBurst())
             {
-                addDrop(i, j);
+                addDrop(x, y);
             }
         }
     }

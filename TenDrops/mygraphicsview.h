@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-10
+// Last Modification: 2013-10-11
 // Description		: My QGraphicsView.
 //
 
@@ -23,6 +23,8 @@ public:
 
 signals:
     void clicked(const QPointF* point);
+    void loadMap(const char *filename);
+    void saveMap();
 
 public slots:
     virtual void mousePressEvent(QMouseEvent *event);
@@ -32,6 +34,8 @@ public slots:
     void endRound();
     void beginAutoRun();
     void endAutoRun();
+    void onLoadMap(const char* filename);
+    void onSaveMap();
 
 private:
     void initUI();

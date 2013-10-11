@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-08
-// Last Modification: 2013-10-10
+// Last Modification: 2013-10-11
 // Description		: Game controller.
 //
 
@@ -25,7 +25,15 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+signals:
+    void loadMap(const char* filename);
+    void saveMap();
+
 private slots:
+    void on_loadPushButton_clicked();
+    void on_savePushButton_clicked();
+    void on_exitAction_triggered();
+    void on_aboutAction_triggered();
 
 private:
     void initUI();

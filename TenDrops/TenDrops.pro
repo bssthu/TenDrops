@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     mygraphicsview.cpp \
     drop.cpp \
     dropgraphics.cpp \
-    gridgraphics.cpp
+    gridgraphics.cpp \
+    mapreader.cpp
 
 HEADERS  += mainwindow.h \
     grid.h \
@@ -28,7 +29,8 @@ HEADERS  += mainwindow.h \
     mygraphicsview.h \
     drop.h \
     dropgraphics.h \
-    gridgraphics.h
+    gridgraphics.h \
+    mapreader.h
 
 FORMS    += mainwindow.ui
 

@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-10
+// Last Modification: 2013-10-11
 // Description		: Game controller.
 //
 
@@ -36,6 +36,8 @@ signals:
 public slots:
     void onClicked(const QPointF* point);
     void step();
+    void onLoadMap(const char* filename);
+    void onSaveMap();
 
 private:
     void createGrids();
@@ -46,11 +48,11 @@ private:
 
 private:
     QGraphicsScene* scene;
-    // ¿ÉÒÔ°üº¬Ë®ÖéµÄ¸ñ×Ó
+    // å¯ä»¥åŒ…å«æ°´ç çš„æ ¼å­
     GridGraphics** grids;
-    // ·ÉĞĞµÄË®µÎ£¬°´ÓÅÏÈ¼¶ÅÅĞò
+    // é£è¡Œçš„æ°´æ»´ï¼ŒæŒ‰ä¼˜å…ˆçº§æ’åº
     std::list<DropGraphics*> drops[4];
-    // ¶¯»­Ïà¹Ø
+    // åŠ¨ç”»ç›¸å…³
     int moves;
     static const int MAX_MOVE = 10;
 };

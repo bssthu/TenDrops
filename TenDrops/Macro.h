@@ -13,19 +13,19 @@
 
 
 #ifndef SAFE_DELETE
-// °²È«É¾³ı£¬Ïàµ±ÓÚ delete
+// å®‰å…¨åˆ é™¤ï¼Œç›¸å½“äº delete
 #define SAFE_DELETE(P) if (P != nullptr) { delete P; P = nullptr; }
 #endif
 
 
 #ifndef SAFE_DELETE_ARRAY
-// °²È«É¾³ı£¬Ïàµ±ÓÚ delete[]
+// å®‰å…¨åˆ é™¤ï¼Œç›¸å½“äº delete[]
 #define SAFE_DELETE_ARRAY(P) if  (P != nullptr) { delete[] P; P = nullptr; }
 #endif
 
 
 #ifndef SAFE_DELETE_POINTER_ARRAY
-// °²È«É¾³ı£¬Ïàµ±ÓÚÏÈ delete ³ÉÔ±ÔÙ delete[]
+// å®‰å…¨åˆ é™¤ï¼Œç›¸å½“äºå…ˆ delete æˆå‘˜å† delete[]
 #define SAFE_DELETE_POINTER_ARRAY(P, size)	\
     if  (P != nullptr)	\
     {	\

@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-10
+// Last Modification: 2013-10-11
 // Description		:
 //
 
@@ -29,6 +29,8 @@ void MyGraphicsView::initUI()
     gameboard = new GameBoard(scene(), this);
 
     connect(this, &MyGraphicsView::clicked, gameboard, &GameBoard::onClicked);
+    connect(this, &MyGraphicsView::loadMap, gameboard, &GameBoard::onLoadMap);
+    connect(this, &MyGraphicsView::saveMap, gameboard, &GameBoard::onSaveMap);
     connect(gameboard, &GameBoard::updated, this, &MyGraphicsView::invalidate);
     connect(gameboard, &GameBoard::beginRun, this, &MyGraphicsView::beginManualRun);
     connect(gameboard, &GameBoard::endRound, this, &MyGraphicsView::endRound);
@@ -79,4 +81,14 @@ void MyGraphicsView::beginAutoRun()
 void MyGraphicsView::endAutoRun()
 {
     uiMode = UIMode::FREE;
+}
+
+void MyGraphicsView::onLoadMap(const char* filename)
+{
+    emit loadMap(filename);
+}
+
+void MyGraphicsView::onSaveMap()
+{
+    emit saveMap();
 }
