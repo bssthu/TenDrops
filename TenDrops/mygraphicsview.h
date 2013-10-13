@@ -36,6 +36,8 @@ public slots:
     void onDebug(void*);
     void onSetDropsLeft(int dropNum);
     void onBFS();
+    void onClose();
+    QString checkThreadInfo();
 
 private:
     void initUI();

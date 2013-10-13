@@ -131,3 +131,13 @@ void MyGraphicsView::onBFS()
 {
     gameboard->onBFS();
 }
+
+void MyGraphicsView::onClose()
+{
+    gameboard->abortThread();
+}
+
+QString MyGraphicsView::checkThreadInfo()
+{
+    return gameboard->checkThreadInfo();
+}

@@ -12,11 +12,13 @@
 #define GAMEBOARD_H
 
 #include <QObject>
-#include "ai.h"
+#include "AI/bfsthread.h"
 
 class QGraphicsScene;
+class QTimer;
 class GridGraphics;
 class DropGraphics;
+class BFSThread;
 
 class GameBoard : public QObject
 {
@@ -31,6 +33,8 @@ public:
     void onBFS();
 
     void nextOper();
+    void abortThread();
+    QString checkThreadInfo();
 
 signals:
     void updated();
@@ -65,8 +69,7 @@ private:
     int moves;
     static const int MAX_MOVE = 10;
 
-    AI::Point* opers;
-    int steps;
+    MyThread* thread;
     int stepsCompleted;
 };
 

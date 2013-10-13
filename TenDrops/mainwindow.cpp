@@ -11,13 +11,19 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
+#include <QTimer>
+#include <QLabel>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , label(new QLabel(this))
+    , timer(new QTimer(this))
 {
     ui->setupUi(this);
+    ui->statusBar->addWidget(label);
     initUI();
+    timer->start(1000);
 }
 
 MainWindow::~MainWindow()
@@ -32,6 +38,7 @@ void MainWindow::initUI()
     connect(this, &MainWindow::saveMap, ui->graphicsView, &MyGraphicsView::onSaveMap);
     connect(this, &MainWindow::sigDebug, ui->graphicsView, &MyGraphicsView::onDebug);
     connect(this, &MainWindow::bfs, ui->graphicsView, &MyGraphicsView::onBFS);
+    connect(timer, &QTimer::timeout, this, &MainWindow::checkThreadInfo);
 }
 
 void MainWindow::on_loadPushButton_clicked()
@@ -62,4 +69,14 @@ void MainWindow::on_exitAction_triggered()
 void MainWindow::on_aboutAction_triggered()
 {
     QMessageBox::information(this, "关于", "作者: 蚌绍诗\n班级: 自03\n学号: 2010011428");
+}
+
+void MainWindow::checkThreadInfo()
+{
+    label->setText(ui->graphicsView->checkThreadInfo());
+}
+
+void MainWindow::closeEvent(QCloseEvent* /*event*/)
+{
+    ui->graphicsView->onClose();
 }

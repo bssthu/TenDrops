@@ -17,6 +17,8 @@ namespace Ui {
 class MainWindow;
 }
 
+class QLabel;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -39,11 +41,18 @@ private slots:
     void on_exitAction_triggered();
     void on_aboutAction_triggered();
 
+    void checkThreadInfo();
+
+protected:
+    void closeEvent(QCloseEvent* event);
+
 private:
     void initUI();
 
 private:
     Ui::MainWindow *ui;
+    QLabel* label;
+    QTimer* timer;
 };
 
 #endif // MAINWINDOW_H

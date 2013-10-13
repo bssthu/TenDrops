@@ -15,7 +15,7 @@
 #include "Macro.h"
 #include "mapreader.h"
 #include "state.h"
-#include "ai.h"
+#include "AI/bfsthread.h"
 
 GameBoard::GameBoard(QGraphicsScene *scene, QObject *parent)
     : QObject(parent)
@@ -25,8 +25,7 @@ GameBoard::GameBoard(QGraphicsScene *scene, QObject *parent)
     , dropNum(10)
     , combo(0)
     , moves(0)
-    , opers(nullptr)
-    , steps(0)
+    , thread(nullptr)
     , stepsCompleted(0)
 {
     createGrids();
@@ -137,23 +136,22 @@ void GameBoard::onBFS()
         }
     }
     State* state = new State(buffer);
-    opers = nullptr;
-    steps = stepsCompleted = 0;
-    AI::bfs(state, &opers, &steps);
+    thread = new BFSThread(state);
+    thread->start();
     emit beginAutoRun();
 }
 
 void GameBoard::nextOper()
 {
-    if (stepsCompleted >= steps)
-    {
-        emit endAutoRun();
-        SAFE_DELETE_ARRAY(opers);
-        stepsCompleted = 0;
-        steps = 0;
-        return;
-    }
-    grids[opers[stepsCompleted].y * 6 + opers[stepsCompleted].x]->addDrop();
+//    if (stepsCompleted >= steps)
+//    {
+//        emit endAutoRun();
+//        SAFE_DELETE_ARRAY(opers);
+//        stepsCompleted = 0;
+//        steps = 0;
+//        return;
+//    }
+//    grids[opers[stepsCompleted].y * 6 + opers[stepsCompleted].x]->addDrop();
 
     ++stepsCompleted;
 }
@@ -230,5 +228,27 @@ void GameBoard::addDrops(int x, int y)
         DropGraphics* drop = new DropGraphics((Drop::DropFrom)i, x, y);
         drops[i].push_back(drop);
         scene->addItem(drop);
+    }
+}
+
+void GameBoard::abortThread()
+{
+    if (nullptr != thread)
+    {
+        thread->isExit = true;
+        thread->wait();
+        SAFE_DELETE(thread);
+    }
+}
+
+QString GameBoard::checkThreadInfo()
+{
+    if (nullptr != thread)
+    {
+        return thread->getInfo();
+    }
+    else
+    {
+        return "就绪";
     }
 }
