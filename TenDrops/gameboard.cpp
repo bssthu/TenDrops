@@ -14,6 +14,8 @@
 #include "dropgraphics.h"
 #include "Macro.h"
 #include "mapreader.h"
+#include "state.h"
+#include "ai.h"
 
 GameBoard::GameBoard(QGraphicsScene *scene, QObject *parent)
     : QObject(parent)
@@ -24,6 +26,9 @@ GameBoard::GameBoard(QGraphicsScene *scene, QObject *parent)
     , dropNum(10)
     , combo(0)
     , moves(0)
+    , opers(nullptr)
+    , steps(0)
+    , stepsCompleted(0)
 {
     createGrids();
 }
@@ -120,6 +125,38 @@ void GameBoard::onSaveMap()
         }
     }
     MapReader::saveMap("Data//Maps//1.map", buffer);
+}
+
+void GameBoard::onBFS()
+{
+    int buffer[36];
+    for (int x = 0; x < 6; ++x)
+    {
+        for (int y = 0; y < 6; ++y)
+        {
+            buffer[y * 6 + x] = grids[y * 6 + x]->dropSize();
+        }
+    }
+    State* state = new State(buffer);
+    opers = nullptr;
+    steps = stepsCompleted = 0;
+    AI::bfs(state, &opers, &steps);
+    emit beginAutoRun();
+}
+
+void GameBoard::nextOper()
+{
+    if (stepsCompleted >= steps)
+    {
+        emit endAutoRun();
+        SAFE_DELETE_ARRAY(opers);
+        stepsCompleted = 0;
+        steps = 0;
+        return;
+    }
+    grids[opers[stepsCompleted].y * 6 + opers[stepsCompleted].x]->addDrop();
+
+    ++stepsCompleted;
 }
 
 void GameBoard::checkDrops()

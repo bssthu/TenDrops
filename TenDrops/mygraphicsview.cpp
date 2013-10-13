@@ -45,9 +45,6 @@ void MyGraphicsView::initUI()
     text->setPos(395.0f, 25.0f);
     scene()->addItem(text);
 
-    connect(this, &MyGraphicsView::clicked, gameboard, &GameBoard::onClicked);
-    connect(this, &MyGraphicsView::loadMap, gameboard, &GameBoard::onLoadMap);
-    connect(this, &MyGraphicsView::saveMap, gameboard, &GameBoard::onSaveMap);
     connect(gameboard, &GameBoard::updated, this, &MyGraphicsView::invalidate);
     connect(gameboard, &GameBoard::beginRun, this, &MyGraphicsView::beginManualRun);
     connect(gameboard, &GameBoard::endRound, this, &MyGraphicsView::endRound);
@@ -61,7 +58,7 @@ void MyGraphicsView::mousePressEvent(QMouseEvent *event)
 {
     if (Qt::LeftButton == event->button() && UIMode::FREE == uiMode)
     {
-        emit clicked(&event->localPos());
+        gameboard->onClicked(&event->localPos());
     }
 }
 
@@ -86,6 +83,12 @@ void MyGraphicsView::endRound()
         uiMode = UIMode::FREE;
         timer->stop();
     }
+    else if (UIMode::AUTORUN == uiMode)
+    {
+        timer->stop();
+        gameboard->nextOper();
+        timer->start(20);
+    }
 }
 
 void MyGraphicsView::beginAutoRun()
@@ -93,6 +96,8 @@ void MyGraphicsView::beginAutoRun()
     if (UIMode::FREE == uiMode)
     {
         uiMode = UIMode::AUTORUN;
+        gameboard->nextOper();
+        timer->start(20);
     }
 }
 
@@ -103,12 +108,12 @@ void MyGraphicsView::endAutoRun()
 
 void MyGraphicsView::onLoadMap(const char* filename)
 {
-    emit loadMap(filename);
+    gameboard->onLoadMap(filename);
 }
 
 void MyGraphicsView::onSaveMap()
 {
-    emit saveMap();
+    gameboard->onSaveMap();
 }
 
 void MyGraphicsView::onDebug(void*)
@@ -120,4 +125,9 @@ void MyGraphicsView::onDebug(void*)
 void MyGraphicsView::onSetDropsLeft(int dropNum)
 {
     text->setPlainText(QString::number(dropNum));
+}
+
+void MyGraphicsView::onBFS()
+{
+    gameboard->onBFS();
 }

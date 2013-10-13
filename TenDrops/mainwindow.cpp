@@ -28,9 +28,10 @@ MainWindow::~MainWindow()
 void MainWindow::initUI()
 {
     setWindowIcon(QIcon("://Data//icon.ico"));
-    connect(this, &MainWindow::loadMap, ui->graphicsView, &MyGraphicsView::loadMap);
-    connect(this, &MainWindow::saveMap, ui->graphicsView, &MyGraphicsView::saveMap);
+    connect(this, &MainWindow::loadMap, ui->graphicsView, &MyGraphicsView::onLoadMap);
+    connect(this, &MainWindow::saveMap, ui->graphicsView, &MyGraphicsView::onSaveMap);
     connect(this, &MainWindow::sigDebug, ui->graphicsView, &MyGraphicsView::onDebug);
+    connect(this, &MainWindow::bfs, ui->graphicsView, &MyGraphicsView::onBFS);
 }
 
 void MainWindow::on_loadPushButton_clicked()
@@ -41,6 +42,11 @@ void MainWindow::on_loadPushButton_clicked()
 void MainWindow::on_savePushButton_clicked()
 {
     emit saveMap();
+}
+
+void MainWindow::on_bfsPushButton_clicked()
+{
+    emit bfs();
 }
 
 void MainWindow::on_debugPushButton_clicked()

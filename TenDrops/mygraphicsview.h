@@ -22,9 +22,6 @@ public:
     explicit MyGraphicsView(QWidget *parent = 0);
 
 signals:
-    void clicked(const QPointF* point);
-    void loadMap(const char *filename);
-    void saveMap();
 
 public slots:
     virtual void mousePressEvent(QMouseEvent *event);
@@ -38,6 +35,7 @@ public slots:
     void onSaveMap();
     void onDebug(void*);
     void onSetDropsLeft(int dropNum);
+    void onBFS();
 
 private:
     void initUI();

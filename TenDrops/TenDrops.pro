@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     dropgraphics.cpp \
     gridgraphics.cpp \
     mapreader.cpp \
-    state.cpp
+    state.cpp \
+    ai.cpp
 
 HEADERS  += mainwindow.h \
     grid.h \
@@ -32,7 +33,8 @@ HEADERS  += mainwindow.h \
     dropgraphics.h \
     gridgraphics.h \
     mapreader.h \
-    state.h
+    state.h \
+    ai.h
 
 FORMS    += mainwindow.ui
 

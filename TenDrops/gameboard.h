@@ -13,7 +13,7 @@
 
 #include <QObject>
 #include <list>
-#include "state.h"
+#include "ai.h"
 
 class QGraphicsScene;
 class GridGraphics;
@@ -26,6 +26,13 @@ public:
     explicit GameBoard(QGraphicsScene* scene, QObject *parent = 0);
     ~GameBoard();
 
+    void onClicked(const QPointF* point);
+    void onLoadMap(const char* filename);
+    void onSaveMap();
+    void onBFS();
+
+    void nextOper();
+
 signals:
     void updated();
 
@@ -37,10 +44,7 @@ signals:
     void setDropsLeft(int dropNum);
 
 public slots:
-    void onClicked(const QPointF* point);
     void step();
-    void onLoadMap(const char* filename);
-    void onSaveMap();
 
 private:
     void createGrids();
@@ -58,9 +62,14 @@ private:
     std::list<DropGraphics*> deadDrops;
     int dropNum;
     int combo;
+
     // 动画相关
     int moves;
     static const int MAX_MOVE = 10;
+
+    AI::Point* opers;
+    int steps;
+    int stepsCompleted;
 };
 
 #endif // GAMEBOARD_H
