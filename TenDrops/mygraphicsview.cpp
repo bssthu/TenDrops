@@ -50,6 +50,8 @@ void MyGraphicsView::initUI()
     connect(gameboard, &GameBoard::endRound, this, &MyGraphicsView::endRound);
     connect(gameboard, &GameBoard::beginAutoRun, this, &MyGraphicsView::beginAutoRun);
     connect(gameboard, &GameBoard::endAutoRun, this, &MyGraphicsView::endAutoRun);
+    connect(gameboard, &GameBoard::beginAutoCalc, this, &MyGraphicsView::beginAutoCalc);
+    connect(gameboard, &GameBoard::calcOK, this, &MyGraphicsView::calcOK);
     connect(gameboard, &GameBoard::setDropsLeft, this, &MyGraphicsView::onSetDropsLeft);
     connect(timer, &QTimer::timeout, gameboard, &GameBoard::step);
 }
@@ -93,7 +95,7 @@ void MyGraphicsView::endRound()
 
 void MyGraphicsView::beginAutoRun()
 {
-    if (UIMode::FREE == uiMode)
+    if (UIMode::CALCOK == uiMode)
     {
         uiMode = UIMode::AUTORUN;
         gameboard->nextOper();
@@ -104,6 +106,25 @@ void MyGraphicsView::beginAutoRun()
 void MyGraphicsView::endAutoRun()
 {
     uiMode = UIMode::FREE;
+}
+
+void MyGraphicsView::beginAutoCalc()
+{
+    if (UIMode::FREE == uiMode)
+    {
+        uiMode = UIMode::AUTOCALC;
+    }
+}
+
+void MyGraphicsView::calcOK()
+{
+    if (UIMode::AUTOCALC == uiMode)
+    {
+        uiMode = UIMode::CALCOK;
+        uiMode = UIMode::AUTORUN;
+        gameboard->nextOper();
+        timer->start(20);
+    }
 }
 
 void MyGraphicsView::onLoadMap(const char* filename)
@@ -132,6 +153,11 @@ void MyGraphicsView::onBFS()
     gameboard->onBFS();
 }
 
+void MyGraphicsView::onDFS()
+{
+    gameboard->onDFS();
+}
+
 void MyGraphicsView::onClose()
 {
     gameboard->abortThread();
@@ -140,4 +166,17 @@ void MyGraphicsView::onClose()
 QString MyGraphicsView::checkThreadInfo()
 {
     return gameboard->checkThreadInfo();
+}
+
+void MyGraphicsView::checkThreadResult()
+{
+    if (UIMode::AUTOCALC == uiMode)
+    {
+        gameboard->checkCalcResult();
+    }
+}
+
+void MyGraphicsView::abortThread()
+{
+    gameboard->abortThread();
 }

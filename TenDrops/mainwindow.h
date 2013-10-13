@@ -32,11 +32,14 @@ signals:
     void saveMap();
     void sigDebug(void* bug);
     void bfs();
+    void dfs();
 
 private slots:
     void on_loadPushButton_clicked();
     void on_savePushButton_clicked();
     void on_bfsPushButton_clicked();
+    void on_dfsPushButton_clicked();
+    void on_abortPushButton_clicked();
     void on_debugPushButton_clicked();
     void on_exitAction_triggered();
     void on_aboutAction_triggered();

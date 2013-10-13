@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->statusBar->addWidget(label);
     initUI();
-    timer->start(1000);
+    timer->start(500);
 }
 
 MainWindow::~MainWindow()
@@ -38,6 +38,8 @@ void MainWindow::initUI()
     connect(this, &MainWindow::saveMap, ui->graphicsView, &MyGraphicsView::onSaveMap);
     connect(this, &MainWindow::sigDebug, ui->graphicsView, &MyGraphicsView::onDebug);
     connect(this, &MainWindow::bfs, ui->graphicsView, &MyGraphicsView::onBFS);
+    connect(this, &MainWindow::dfs, ui->graphicsView, &MyGraphicsView::onDFS);
+    connect(timer, &QTimer::timeout, ui->graphicsView, &MyGraphicsView::checkThreadResult);
     connect(timer, &QTimer::timeout, this, &MainWindow::checkThreadInfo);
 }
 
@@ -54,6 +56,16 @@ void MainWindow::on_savePushButton_clicked()
 void MainWindow::on_bfsPushButton_clicked()
 {
     emit bfs();
+}
+
+void MainWindow::on_dfsPushButton_clicked()
+{
+    emit dfs();
+}
+
+void MainWindow::on_abortPushButton_clicked()
+{
+    ui->graphicsView->abortThread();
 }
 
 void MainWindow::on_debugPushButton_clicked()

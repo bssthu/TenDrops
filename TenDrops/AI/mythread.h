@@ -20,10 +20,19 @@ class MyThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit MyThread(State* state, QObject *parent = 0);
+    struct Point
+    {
+        int x;
+        int y;
+    };
+
+public:
+    explicit MyThread(State* state, int water, QObject *parent = 0);
     ~MyThread();
 
     virtual QString getInfo() = 0;
+    bool succeed();
+    Point nextOper();
 
 signals:
 
@@ -33,20 +42,18 @@ protected:
     void deleteList();
 
 public:
-    struct Point
-    {
-        int x;
-        int y;
-    };
-
-public:
     volatile bool isExit;
 
 protected:
     QLinkedList<State*> open;
     QLinkedList<State*> closed;
+    int openSize;
+    int closedSize;
+    int water;
+    bool isSucceed;
     Point* opers;
     int steps;
+    int stepsCompleted;
 };
 
 #endif // MYTHREAD_H

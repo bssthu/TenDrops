@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     mapreader.cpp \
     state.cpp \
     AI/bfsthread.cpp \
-    AI/mythread.cpp
+    AI/mythread.cpp \
+    AI/dfsthread.cpp
 
 HEADERS  += mainwindow.h \
     grid.h \
@@ -36,7 +37,8 @@ HEADERS  += mainwindow.h \
     mapreader.h \
     state.h \
     AI/bfsthread.h \
-    AI/mythread.h
+    AI/mythread.h \
+    AI/dfsthread.h
 
 FORMS    += mainwindow.ui
 

@@ -31,10 +31,12 @@ public:
     void onLoadMap(const char* filename);
     void onSaveMap();
     void onBFS();
+    void onDFS();
 
     void nextOper();
     void abortThread();
     QString checkThreadInfo();
+    void checkCalcResult();
 
 signals:
     void updated();
@@ -43,8 +45,10 @@ signals:
     void endRound();
     void beginAutoRun();
     void endAutoRun();
+    void beginAutoCalc();
+    void calcOK();
 
-    void setDropsLeft(int dropNum);
+    void setDropsLeft(int water);
 
 public slots:
     void step();
@@ -62,7 +66,7 @@ private:
     GridGraphics** grids;
     // 飞行的水滴，按优先级排序
     QList<DropGraphics*> drops[4];
-    int dropNum;
+    int water;
     int combo;
 
     // 动画相关
@@ -70,7 +74,6 @@ private:
     static const int MAX_MOVE = 10;
 
     MyThread* thread;
-    int stepsCompleted;
 };
 
 #endif // GAMEBOARD_H

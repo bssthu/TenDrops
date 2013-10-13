@@ -84,6 +84,32 @@
      <string>(&amp;B)FS</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="abortPushButton">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>290</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>(&amp;A)bort</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="dfsPushButton">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>130</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>(&amp;D)FS</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

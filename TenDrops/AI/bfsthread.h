@@ -17,7 +17,7 @@ class BFSThread : public MyThread
 {
     Q_OBJECT
 public:
-    explicit BFSThread(State* state, QObject *parent = 0);
+    explicit BFSThread(State* state, int water, QObject *parent = 0);
     QString getInfo();
 
 signals:

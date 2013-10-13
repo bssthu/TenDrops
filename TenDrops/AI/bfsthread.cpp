@@ -13,8 +13,8 @@
 #include "state.h"
 #include "Macro.h"
 
-BFSThread::BFSThread(State* state, QObject *parent)
-    : MyThread(state, parent)
+BFSThread::BFSThread(State* state, int water, QObject *parent)
+    : MyThread(state, water, parent)
     , deep(0)
 {
 }
@@ -28,12 +28,14 @@ void BFSThread::run()
         if (open.size() == 0)
         {
             steps = 0;
+            isSucceed = true;
             return;
         }
         ++deep;
     } while (nullptr == finalState && !isExit);
     if (isExit)
     {
+        deleteList();
         return;
     }
 
@@ -54,6 +56,7 @@ void BFSThread::run()
         opers[i].y = finalState->getY();
     }
 
+    isSucceed = true;
     deleteList();
 }
 
@@ -113,5 +116,10 @@ void BFSThread::bfs_addToOpenList(State* newState)
 
 QString BFSThread::getInfo()
 {
-    return QString("open=%1; closed=%2; deep=%3").arg(open.size()).arg(closed.size()).arg(deep);
+    if (!isSucceed && !isExit)
+    {
+        openSize = open.size();
+        closedSize = closed.size();
+    }
+    return QString("open=%1; closed=%2; deep=%3").arg(openSize).arg(closedSize).arg(deep);
 }

@@ -16,17 +16,17 @@
 #include "mapreader.h"
 #include "state.h"
 #include "AI/bfsthread.h"
+#include "AI/dfsthread.h"
 
 GameBoard::GameBoard(QGraphicsScene *scene, QObject *parent)
     : QObject(parent)
     , scene(scene)
     , grids(new GridGraphics*[36])
     , drops()
-    , dropNum(10)
+    , water(10)
     , combo(0)
     , moves(0)
     , thread(nullptr)
-    , stepsCompleted(0)
 {
     createGrids();
 }
@@ -55,7 +55,7 @@ void GameBoard::onClicked(const QPointF *point)
             addDrops(x, y);
             emit beginRun();
         }
-        emit setDropsLeft(--dropNum);
+        emit setDropsLeft(--water);
         emit updated();
     }
 }
@@ -136,24 +136,53 @@ void GameBoard::onBFS()
         }
     }
     State* state = new State(buffer);
-    thread = new BFSThread(state);
+    thread = new BFSThread(state, water);
     thread->start();
-    emit beginAutoRun();
+    emit beginAutoCalc();
+}
+
+void GameBoard::onDFS()
+{
+    int buffer[36];
+    for (int x = 0; x < 6; ++x)
+    {
+        for (int y = 0; y < 6; ++y)
+        {
+            buffer[y * 6 + x] = grids[y * 6 + x]->dropSize();
+        }
+    }
+    State* state = new State(buffer);
+    thread = new DFSThread(state, water);
+    thread->start();
+    emit beginAutoCalc();
 }
 
 void GameBoard::nextOper()
 {
-//    if (stepsCompleted >= steps)
-//    {
-//        emit endAutoRun();
-//        SAFE_DELETE_ARRAY(opers);
-//        stepsCompleted = 0;
-//        steps = 0;
-//        return;
-//    }
-//    grids[opers[stepsCompleted].y * 6 + opers[stepsCompleted].x]->addDrop();
-
-    ++stepsCompleted;
+    if (nullptr != thread)
+    {
+        if (thread->succeed())
+        {
+            MyThread::Point pt = thread->nextOper();
+            if (pt.x < 0)
+            {
+                emit endAutoRun();
+            }
+            else
+            {
+                grids[pt.y * 6 + pt.x]->addDrop();
+                checkBurst();
+            }
+        }
+        else if (thread->isExit)
+        {
+            emit endAutoRun();
+        }
+    }
+    else
+    {
+        emit endAutoRun();
+    }
 }
 
 void GameBoard::checkDrops()
@@ -201,7 +230,7 @@ void GameBoard::checkBurst()
                 if (combo >= 3)
                 {
                     combo = 0;
-                    emit setDropsLeft(++dropNum);
+                    emit setDropsLeft(++water);
                 }
                 addDrops(x, y);
             }
@@ -238,6 +267,7 @@ void GameBoard::abortThread()
         thread->isExit = true;
         thread->wait();
         SAFE_DELETE(thread);
+        emit endAutoRun();
     }
 }
 
@@ -250,5 +280,20 @@ QString GameBoard::checkThreadInfo()
     else
     {
         return "就绪";
+    }
+}
+
+void GameBoard::checkCalcResult()
+{
+    if (nullptr != thread)
+    {
+        if (thread->succeed())
+        {
+            emit calcOK();
+        }
+        else if (thread->isExit)
+        {
+            emit endAutoRun();
+        }
     }
 }

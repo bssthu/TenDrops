@@ -95,11 +95,13 @@ void State::checkDrops()
             if (drop->isDead())
             {
                 it = drops[i].erase(it);
+                SAFE_DELETE(drop);
             }
             else if (grids[drop->Drop::y() * 6 + drop->Drop::x()].canAcceptDrop())
             {
                 grids[drop->Drop::y() * 6 + drop->Drop::x()].addDrop();
                 it = drops[i].erase(it);
+                SAFE_DELETE(drop);
             }
             else
             {

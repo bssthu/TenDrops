@@ -31,13 +31,18 @@ public slots:
     void endRound();
     void beginAutoRun();
     void endAutoRun();
+    void beginAutoCalc();
+    void calcOK();
     void onLoadMap(const char* filename);
     void onSaveMap();
     void onDebug(void*);
     void onSetDropsLeft(int dropNum);
     void onBFS();
+    void onDFS();
     void onClose();
     QString checkThreadInfo();
+    void checkThreadResult();
+    void abortThread();
 
 private:
     void initUI();
@@ -47,7 +52,9 @@ private:
     {
         FREE,
         MANUALRUN,
-        AUTORUN
+        AUTORUN,
+        AUTOCALC,
+        CALCOK
     };
     UIMode uiMode;
     GameBoard* gameboard;
