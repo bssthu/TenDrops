@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-11
+// Last Modification: 2013-10-13
 // Description		: My QGraphicsView.
 //
 
@@ -36,6 +36,8 @@ public slots:
     void endAutoRun();
     void onLoadMap(const char* filename);
     void onSaveMap();
+    void onDebug(void*);
+    void onSetDropsLeft(int dropNum);
 
 private:
     void initUI();
@@ -50,6 +52,7 @@ private:
     UIMode uiMode;
     GameBoard* gameboard;
     QTimer* timer;
+    QGraphicsTextItem* text;
 };
 
 #endif // MYGRAPHICSVIEW_H

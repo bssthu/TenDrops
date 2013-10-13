@@ -4,13 +4,15 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-11
+// Last Modification: 2013-10-13
 // Description		:
 //
 
 #include "mygraphicsview.h"
 #include <QMouseEvent>
 #include <QTimer>
+#include <QGraphicsTextItem>
+#include <QTextDocument>
 #include "gameboard.h"
 
 MyGraphicsView::MyGraphicsView(QWidget *parent)
@@ -18,6 +20,7 @@ MyGraphicsView::MyGraphicsView(QWidget *parent)
     , uiMode(UIMode::FREE)
     , gameboard(NULL)
     , timer(new QTimer(this))
+    , text(new QGraphicsTextItem())
 {
     initUI();
 }
@@ -28,6 +31,18 @@ void MyGraphicsView::initUI()
     scene()->addPixmap(QPixmap("://Data//Textures//background.png"));
     gameboard = new GameBoard(scene(), this);
 
+    QTextDocument* doc = text->document();
+    QTextOption opt = doc->defaultTextOption();
+    opt.setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
+    doc->setDefaultTextOption(opt);
+    QFont font("MSYH", 40);
+    doc->setDefaultFont(font);
+    text->setPlainText("????");
+    text->setTextWidth(doc->idealWidth());
+    text->setPlainText("10");
+    text->setPos(395.0f, 25.0f);
+    scene()->addItem(text);
+
     connect(this, &MyGraphicsView::clicked, gameboard, &GameBoard::onClicked);
     connect(this, &MyGraphicsView::loadMap, gameboard, &GameBoard::onLoadMap);
     connect(this, &MyGraphicsView::saveMap, gameboard, &GameBoard::onSaveMap);
@@ -36,6 +51,7 @@ void MyGraphicsView::initUI()
     connect(gameboard, &GameBoard::endRound, this, &MyGraphicsView::endRound);
     connect(gameboard, &GameBoard::beginAutoRun, this, &MyGraphicsView::beginAutoRun);
     connect(gameboard, &GameBoard::endAutoRun, this, &MyGraphicsView::endAutoRun);
+    connect(gameboard, &GameBoard::setDropsLeft, this, &MyGraphicsView::onSetDropsLeft);
     connect(timer, &QTimer::timeout, gameboard, &GameBoard::step);
 }
 
@@ -91,4 +107,15 @@ void MyGraphicsView::onLoadMap(const char* filename)
 void MyGraphicsView::onSaveMap()
 {
     emit saveMap();
+}
+
+void MyGraphicsView::onDebug(void*)
+{
+#ifdef QT_DEBUG
+#endif
+}
+
+void MyGraphicsView::onSetDropsLeft(int dropNum)
+{
+    text->setPlainText(QString::number(dropNum));
 }

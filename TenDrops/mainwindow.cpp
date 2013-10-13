@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-08
-// Last Modification: 2013-10-11
+// Last Modification: 2013-10-13
 // Description		:
 //
 
@@ -30,6 +30,7 @@ void MainWindow::initUI()
     setWindowIcon(QIcon("://Data//icon.ico"));
     connect(this, &MainWindow::loadMap, ui->graphicsView, &MyGraphicsView::loadMap);
     connect(this, &MainWindow::saveMap, ui->graphicsView, &MyGraphicsView::saveMap);
+    connect(this, &MainWindow::sigDebug, ui->graphicsView, &MyGraphicsView::onDebug);
 }
 
 void MainWindow::on_loadPushButton_clicked()
@@ -40,6 +41,11 @@ void MainWindow::on_loadPushButton_clicked()
 void MainWindow::on_savePushButton_clicked()
 {
     emit saveMap();
+}
+
+void MainWindow::on_debugPushButton_clicked()
+{
+    emit sigDebug(nullptr);
 }
 
 void MainWindow::on_exitAction_triggered()

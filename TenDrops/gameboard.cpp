@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-11
+// Last Modification: 2013-10-13
 // Description		:
 //
 
@@ -20,6 +20,9 @@ GameBoard::GameBoard(QGraphicsScene *scene, QObject *parent)
     , scene(scene)
     , grids(new GridGraphics*[36])
     , drops()
+    , deadDrops()
+    , dropNum(10)
+    , combo(0)
     , moves(0)
 {
     createGrids();
@@ -31,29 +34,53 @@ GameBoard::~GameBoard()
     SAFE_DELETE_ARRAY(grids);
 }
 
+DropGraphics* drop = nullptr;
+
 void GameBoard::onClicked(const QPointF *point)
 {
+    DropGraphics* drop = nullptr;
+    for (std::list<DropGraphics*>::iterator it = deadDrops.begin(); it != deadDrops.end(); )
+    {
+        drop = *it;
+        if (nullptr != drop->parentItem())
+        {
+            qDebug("parentItem");
+        }
+        if (nullptr != drop->parentObject())
+        {
+            qDebug("parentObject");
+        }
+        if (nullptr != drop->parentWidget())
+        {
+            qDebug("parentWidget");
+        }
+        ++it;// = deadDrops.erase(it);
+    }
+    SAFE_DELETE(drop);
     // 判断格子
     int x = GridGraphics::getCoordX(point->x());
     int y = GridGraphics::getCoordY(point->y());
     if (x >= 0 && y >= 0)
     {
+        combo = 0;
         // 加水
         grids[y * 6 + x]->addDrop();
         if (grids[y * 6 + x]->checkBurst())
         {
-            addDrop(x, y);
+            ++combo;
+            addDrops(x, y);
             emit beginRun();
         }
+        emit setDropsLeft(--dropNum);
         emit updated();
     }
 }
 
 void GameBoard::createGrids()
 {
-    for (int x = 0; x < 6; x++)
+    for (int x = 0; x < 6; ++x)
     {
-        for (int y = 0; y < 6; y++)
+        for (int y = 0; y < 6; ++y)
         {
             grids[y * 6 + x] = new GridGraphics(x, y);
             scene->addItem(grids[y * 6 + x]);
@@ -65,6 +92,7 @@ void GameBoard::step()
 {
     if (++moves >= MAX_MOVE)
     {
+        // 进行判断
         checkDrops();
         checkBurst();
         if (drops[0].size() == 0
@@ -78,6 +106,7 @@ void GameBoard::step()
     }
     else
     {
+        // 播放动画
         moveDrops(1.0f / (float)MAX_MOVE);
     }
     emit updated();
@@ -88,23 +117,24 @@ void GameBoard::onLoadMap(const char* filename)
     int buffer[36];
     if (MapReader::readMap(filename, buffer))
     {
-        for (int x = 0; x < 6; x++)
+        for (int x = 0; x < 6; ++x)
         {
-            for (int y = 0; y < 6; y++)
+            for (int y = 0; y < 6; ++y)
             {
                 grids[y * 6 + x]->setDropSize(buffer[y * 6 + x]);
             }
         }
     }
     emit updated();
+    state = new State(buffer);
 }
 
 void GameBoard::onSaveMap()
 {
     int buffer[36];
-    for (int x = 0; x < 6; x++)
+    for (int x = 0; x < 6; ++x)
     {
-        for (int y = 0; y < 6; y++)
+        for (int y = 0; y < 6; ++y)
         {
             buffer[y * 6 + x] = grids[y * 6 + x]->dropSize();
         }
@@ -114,7 +144,7 @@ void GameBoard::onSaveMap()
 
 void GameBoard::checkDrops()
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; ++i)
     {
         for (std::list<DropGraphics*>::iterator it = drops[i].begin(); it != drops[i].end(); )
         {
@@ -126,6 +156,8 @@ void GameBoard::checkDrops()
                 // Remove
                 scene->removeItem(drop);
                 it = drops[i].erase(it);
+                deadDrops.push_back(drop);
+                //SAFE_DELETE(drop);
             }
             // 碰到水滴
             else if (grids[drop->Drop::y() * 6 + drop->Drop::x()]->canAcceptDrop())
@@ -134,6 +166,8 @@ void GameBoard::checkDrops()
                 // Remove
                 scene->removeItem(drop);
                 it = drops[i].erase(it);
+                deadDrops.push_back(drop);
+                //SAFE_DELETE(drop);
             }
             else
             {
@@ -145,13 +179,19 @@ void GameBoard::checkDrops()
 
 void GameBoard::checkBurst()
 {
-    for (int x = 0; x < 6; x++)
+    for (int x = 0; x < 6; ++x)
     {
-        for (int y = 0; y < 6; y++)
+        for (int y = 0; y < 6; ++y)
         {
             if (grids[y * 6 + x]->checkBurst())
             {
-                addDrop(x, y);
+                ++combo;
+                if (combo >= 3)
+                {
+                    combo = 0;
+                    emit setDropsLeft(++dropNum);
+                }
+                addDrops(x, y);
             }
         }
     }
@@ -159,7 +199,7 @@ void GameBoard::checkBurst()
 
 void GameBoard::moveDrops(float percent)
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; ++i)
     {
         for (std::list<DropGraphics*>::iterator it = drops[i].begin(); it != drops[i].end(); ++it)
         {
@@ -169,9 +209,9 @@ void GameBoard::moveDrops(float percent)
     }
 }
 
-void GameBoard::addDrop(int x, int y)
+void GameBoard::addDrops(int x, int y)
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; ++i)
     {
         DropGraphics* drop = new DropGraphics((Drop::DropFrom)i, x, y);
         drops[i].push_back(drop);

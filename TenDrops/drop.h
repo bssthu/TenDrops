@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-10
+// Last Modification: 2013-10-13
 // Description		: A flying drop.
 //
 
@@ -23,6 +23,7 @@ public:
     };
 
     Drop(DropFrom dropFrom, int x, int y);
+    virtual ~Drop() { }
 
     int x();
     int y();

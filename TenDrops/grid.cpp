@@ -45,7 +45,7 @@ bool Grid::canAcceptDrop()
     return dropSize_ > 0 && dropSize_ <= MAX_DROP_SIZE;
 }
 
-// ˮ�α�ը
+// 水滴爆炸
 bool Grid::checkBurst()
 {
     if (dropSize_ > MAX_DROP_SIZE)

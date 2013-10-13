@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-11
+// Last Modification: 2013-10-13
 // Description		: Game controller.
 //
 
@@ -13,6 +13,7 @@
 
 #include <QObject>
 #include <list>
+#include "state.h"
 
 class QGraphicsScene;
 class GridGraphics;
@@ -33,6 +34,8 @@ signals:
     void beginAutoRun();
     void endAutoRun();
 
+    void setDropsLeft(int dropNum);
+
 public slots:
     void onClicked(const QPointF* point);
     void step();
@@ -41,7 +44,7 @@ public slots:
 
 private:
     void createGrids();
-    void addDrop(int x, int y);
+    void addDrops(int x, int y);
     void checkDrops();
     void checkBurst();
     void moveDrops(float percent);
@@ -52,9 +55,14 @@ private:
     GridGraphics** grids;
     // 飞行的水滴，按优先级排序
     std::list<DropGraphics*> drops[4];
+    std::list<DropGraphics*> deadDrops;
+    int dropNum;
+    int combo;
     // 动画相关
     int moves;
     static const int MAX_MOVE = 10;
+
+    State* state;
 };
 
 #endif // GAMEBOARD_H

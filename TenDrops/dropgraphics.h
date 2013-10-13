@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-10
-// Last Modification: 2013-10-10
+// Last Modification: 2013-10-13
 // Description		: Graphics of drop.
 //
 
@@ -18,6 +18,7 @@ class DropGraphics : public Drop, public QGraphicsItem
 {
 public:
     explicit DropGraphics(DropFrom dropFrom, int x, int y);
+    ~DropGraphics() { }
 
     QRectF boundingRect() const;
 

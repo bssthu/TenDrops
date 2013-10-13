@@ -11,7 +11,7 @@
 #ifndef GRID_H
 #define GRID_H
 
-// һ�񣬾�ֹ��ˮ��
+// 一格，静止的水珠
 class Grid
 {
 public:
@@ -19,10 +19,10 @@ public:
 
     void setDropSize(int size);
     int dropSize();
-    // ��һ��ˮ
+    // 加一滴水
     void addDrop();
     bool canAcceptDrop();
-    // ˮ�α�ը
+    // 水滴爆炸
     bool checkBurst();
 
 public:
