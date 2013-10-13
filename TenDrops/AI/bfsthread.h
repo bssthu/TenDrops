@@ -12,7 +12,7 @@
 #define BFSTHREAD_H
 
 #include "mythread.h"
-#include <QLinkedList>
+#include <QSet>
 
 class BFSThread : public MyThread
 {
@@ -34,8 +34,8 @@ private:
     void bfs_addToOpenList(State* newState);
 
 private:
-    QLinkedList<State*> open;
-    QLinkedList<State*> closed;
+    QSet<State*> open;
+    QSet<State*> closed;
     int deep;
 };
 

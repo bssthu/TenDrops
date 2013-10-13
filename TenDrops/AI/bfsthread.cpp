@@ -19,7 +19,7 @@ BFSThread::BFSThread(State* state, int water, QObject *parent)
     , closed()
     , deep(0)
 {
-    open.push_back(state);
+    open.insert(state);
 }
 
 void BFSThread::run()
@@ -67,7 +67,7 @@ State* BFSThread::bfs_traversal()
 {
     int i = 0;
     int iEnd = open.size();
-    for (QLinkedList<State*>::iterator it = open.begin(); i < iEnd; ++i)
+    for (QSet<State*>::iterator it = open.begin(); i < iEnd; ++i)
     {
         if (isExit)
         {
@@ -91,14 +91,14 @@ State* BFSThread::bfs_traversal()
             }
         }
         it = open.erase(it);
-        closed.push_back(curState);
+        closed.insert(curState);
     }
     return nullptr;
 }
 
 void BFSThread::bfs_addToOpenList(State* newState)
 {
-    for (QLinkedList<State*>::iterator it = open.begin(); it != open.end(); ++it)
+    for (QSet<State*>::iterator it = open.begin(); it != open.end(); ++it)
     {
         if (*newState == *(*it))
         {
@@ -106,7 +106,7 @@ void BFSThread::bfs_addToOpenList(State* newState)
             return;
         }
     }
-    for (QLinkedList<State*>::iterator it = closed.begin(); it != closed.end(); ++it)
+    for (QSet<State*>::iterator it = closed.begin(); it != closed.end(); ++it)
     {
         if (*newState == *(*it))
         {
@@ -114,13 +114,13 @@ void BFSThread::bfs_addToOpenList(State* newState)
             return;
         }
     }
-    open.push_back(newState);
+    open.insert(newState);
 }
 
 void BFSThread::deleteElements()
 {
     openSize = open.size();
-    for (QLinkedList<State*>::iterator it = open.begin(); it != open.end(); )
+    for (QSet<State*>::iterator it = open.begin(); it != open.end(); )
     {
         State* state = *it;
         ++it;
@@ -128,7 +128,7 @@ void BFSThread::deleteElements()
     }
     open.clear();
     closedSize = closed.size();
-    for (QLinkedList<State*>::iterator it = closed.begin(); it != closed.end(); )
+    for (QSet<State*>::iterator it = closed.begin(); it != closed.end(); )
     {
         State* state = *it;
         ++it;
