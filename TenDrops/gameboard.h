@@ -12,7 +12,6 @@
 #define GAMEBOARD_H
 
 #include <QObject>
-#include <list>
 #include "ai.h"
 
 class QGraphicsScene;
@@ -58,8 +57,7 @@ private:
     // 可以包含水珠的格子
     GridGraphics** grids;
     // 飞行的水滴，按优先级排序
-    std::list<DropGraphics*> drops[4];
-    std::list<DropGraphics*> deadDrops;
+    QList<DropGraphics*> drops[4];
     int dropNum;
     int combo;
 

@@ -12,7 +12,7 @@
 #define STATE_H
 
 #include "grid.h"
-#include <list>
+#include <QList>
 
 class Drop;
 
@@ -26,6 +26,11 @@ public:
 
     State* addWater(int x, int y);
     void getDropsSize(int *buffer);
+    bool isClear();
+
+    State* getPrev();
+    int getX();
+    int getY();
 
 private:
     void checkDrops();
@@ -34,10 +39,11 @@ private:
     void addDrops(int x, int y);
 
 private:
-    static const Grid emptyGrids[36];
     Grid grids[36];
-    std::list<Drop*> drops[4];
+    QList<Drop*> drops[4];
+    State* prev;
     int deep;
+    int x, y;
 };
 
 #endif // STATE_H

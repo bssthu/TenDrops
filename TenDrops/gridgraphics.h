@@ -27,6 +27,12 @@ public:
     static int getCoordY(float y);
 
 private:
+    static const int WIDTH = 48;
+    static const int GRID_SX = 50;
+    static const int GRID_SY = 40;
+    static const int GRID_DX = 54;
+    static const int GRID_DY = 54;
+
     static QImage img[];
     QRectF rect;
 };

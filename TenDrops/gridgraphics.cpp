@@ -11,7 +11,7 @@ QImage GridGraphics::img[] =
 };
 
 GridGraphics::GridGraphics(int x, int y)
-    : Grid(x, y)
+    : Grid()
     , QGraphicsItem()
     , rect(GRID_SX + GRID_DX * x - WIDTH * 0.5f, GRID_SY + GRID_DY * y - WIDTH * 0.5f, WIDTH, WIDTH)
 {
@@ -29,8 +29,8 @@ void GridGraphics::paint(QPainter *painter, const QStyleOptionGraphicsItem */*op
 
 int GridGraphics::getCoordX(float x)
 {
-    int i = floor((x - (GRID_SX - Grid::WIDTH / 2)) / GRID_DX);
-    if (x - (GRID_SX - Grid::WIDTH / 2) - i * GRID_DX > Grid::WIDTH
+    int i = floor((x - (GRID_SX - WIDTH / 2)) / GRID_DX);
+    if (x - (GRID_SX - WIDTH / 2) - i * GRID_DX > WIDTH
             || i < 0 || i >= 6)
     {
         return -1;
@@ -43,8 +43,8 @@ int GridGraphics::getCoordX(float x)
 
 int GridGraphics::getCoordY(float y)
 {
-    int j = floor((y - (GRID_SY - Grid::WIDTH / 2)) / GRID_DY);
-    if (y - (GRID_SY - Grid::WIDTH / 2) - j * GRID_DY > Grid::WIDTH
+    int j = floor((y - (GRID_SY - WIDTH / 2)) / GRID_DY);
+    if (y - (GRID_SY - WIDTH / 2) - j * GRID_DY > WIDTH
             || j < 0 || j >= 6)
     {
         return -1;

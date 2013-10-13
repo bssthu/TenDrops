@@ -11,6 +11,8 @@
 #ifndef AI_H
 #define AI_H
 
+#include <QLinkedList>
+
 class State;
 
 class AI
@@ -25,7 +27,13 @@ public:
     AI() = delete;
     static void bfs(State* state, Point** op, int* steps);
 
-public:
+private:
+    static State *bfs_traversal();
+    static void bfs_addToOpenList(State* newState);
+
+private:
+    static QLinkedList<State*> open;
+    static QLinkedList<State*> closed;
 };
 
 #endif // AI_H

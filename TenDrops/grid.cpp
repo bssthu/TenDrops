@@ -4,16 +4,14 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-08
-// Last Modification: 2013-10-10
+// Last Modification: 2013-10-13
 // Description		:
 //
 
 #include "grid.h"
 
-Grid::Grid(int x, int y)
-    : idX(x)
-    , idY(y)
-    , dropSize_(0)
+Grid::Grid()
+    : dropSize_(0)
 {
 }
 

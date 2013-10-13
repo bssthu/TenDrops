@@ -13,28 +13,15 @@
 #include "Macro.h"
 #include <drop.h>
 
-const Grid State::emptyGrids[36] =
-{
-    Grid(0, 0), Grid(0, 1), Grid(0, 2), Grid(0, 3), Grid(0, 4), Grid(0, 5),
-    Grid(1, 0), Grid(1, 1), Grid(1, 2), Grid(1, 3), Grid(1, 4), Grid(1, 5),
-    Grid(2, 0), Grid(2, 1), Grid(2, 2), Grid(2, 3), Grid(2, 4), Grid(2, 5),
-    Grid(3, 0), Grid(3, 1), Grid(3, 2), Grid(3, 3), Grid(3, 4), Grid(3, 5),
-    Grid(4, 0), Grid(4, 1), Grid(4, 2), Grid(4, 3), Grid(4, 4), Grid(4, 5),
-    Grid(5, 0), Grid(5, 1), Grid(5, 2), Grid(5, 3), Grid(5, 4), Grid(5, 5),
-};
-
 State::State(int *buffer)
-    : grids(emptyGrids)
+    : grids()
     , drops()
+    , prev(nullptr)
+    , deep(0)
+    , x(-1)
+    , y(-1)
 {
-    for (int x = 0; x < 6; x++)
-    {
-        for (int y = 0; y < 6; y++)
-        {
-            int index = y * 6 + x;
-            grids[index].setDropSize(buffer[index]);
-        }
-    }
+    memcpy_s(grids, sizeof(grids), buffer, sizeof(grids));
 }
 
 bool State::operator ==(State& state)
@@ -51,6 +38,10 @@ State* State::addWater(int x, int y)
     }
 
     State* newState = new State(*this);
+    newState->prev = this;
+    newState->deep = deep + 1;
+    newState->x = x;
+    newState->y = y;
     newState->grids[index].addDrop();
     do
     {
@@ -72,11 +63,32 @@ void State::getDropsSize(int* buffer)
     }
 }
 
+bool State::isClear()
+{
+    int buffer[36] = { 0 };
+    return 0 == memcmp(grids, buffer, sizeof(grids));
+}
+
+State* State::getPrev()
+{
+    return prev;
+}
+
+int State::getX()
+{
+    return x;
+}
+
+int State::getY()
+{
+    return y;
+}
+
 void State::checkDrops()
 {
     for (int i = 0; i < 4; i++)
     {
-        for (std::list<Drop*>::iterator it = drops[i].begin(); it != drops[i].end(); )
+        for (QList<Drop*>::iterator it = drops[i].begin(); it != drops[i].end(); )
         {
             Drop* drop = *it;
             drop->step();

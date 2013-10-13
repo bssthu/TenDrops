@@ -22,7 +22,6 @@ GameBoard::GameBoard(QGraphicsScene *scene, QObject *parent)
     , scene(scene)
     , grids(new GridGraphics*[36])
     , drops()
-    , deadDrops()
     , dropNum(10)
     , combo(0)
     , moves(0)
@@ -163,7 +162,7 @@ void GameBoard::checkDrops()
 {
     for (int i = 0; i < 4; ++i)
     {
-        for (std::list<DropGraphics*>::iterator it = drops[i].begin(); it != drops[i].end(); )
+        for (QList<DropGraphics*>::iterator it = drops[i].begin(); it != drops[i].end(); )
         {
             DropGraphics* drop = *it;
             drop->step();
@@ -216,7 +215,7 @@ void GameBoard::moveDrops(float percent)
 {
     for (int i = 0; i < 4; ++i)
     {
-        for (std::list<DropGraphics*>::iterator it = drops[i].begin(); it != drops[i].end(); ++it)
+        for (QList<DropGraphics*>::iterator it = drops[i].begin(); it != drops[i].end(); ++it)
         {
             DropGraphics* drop = *it;
             drop->move(percent);
