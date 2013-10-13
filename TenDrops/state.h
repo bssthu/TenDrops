@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-13
-// Last Modification: 2013-10-13
+// Last Modification: 2013-10-14
 // Description		: State in search.
 //
 
@@ -22,7 +22,7 @@ unsigned int qHash(State key);
 class State
 {
 public:
-    explicit State(int* buffer);
+    explicit State(char *buffer);
 
     // compare drop size
     bool operator ==(State& state);
@@ -51,7 +51,7 @@ private:
 
 private:
     Grid grids[36];
-    QList<Drop*> drops[4];
+    QList<Drop*>* drops;
     State* prev;
     int water;
     int combo;

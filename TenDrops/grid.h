@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-08
-// Last Modification: 2013-10-13
+// Last Modification: 2013-10-14
 // Description		: A grid in board. Can contain a drop of water.
 //
 
@@ -17,7 +17,7 @@ class Grid
 public:
     explicit Grid();
 
-    void setDropSize(int size);
+    void setDropSize(char size);
     int dropSize();
     // 加一滴水
     void addDrop();
@@ -29,7 +29,7 @@ public:
     static const int MAX_DROP_SIZE = 4;
 
 protected:
-    int dropSize_;
+    char dropSize_;
 };
 
 #endif // GRID_H

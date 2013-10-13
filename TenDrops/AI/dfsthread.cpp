@@ -4,16 +4,18 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-13
-// Last Modification: 2013-10-13
+// Last Modification: 2013-10-14
 // Description		:
 //
 
 #include "dfsthread.h"
+#include "state.h"
 
 DFSThread::DFSThread(State *state, int water, QObject *parent)
     : MyThread(water, parent)
 {
-    open.insert(state);
+    state->setWater(water);
+    open.push_back(state);
 }
 
 void DFSThread::run()

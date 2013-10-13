@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-13
-// Last Modification: 2013-10-13
+// Last Modification: 2013-10-14
 // Description		: Thread of dfs search.
 //
 
@@ -12,7 +12,7 @@
 #define DFSTHREAD_H
 
 #include "mythread.h"
-#include <set>
+#include <QList>
 #include <QStack>
 
 class DFSThread : public MyThread
@@ -25,7 +25,7 @@ protected:
     void run();
 
 private:
-    std::set<State*> open;
+    QList<State*> open;
     QStack<State*> closed;
 };
 

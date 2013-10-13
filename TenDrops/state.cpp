@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-13
-// Last Modification: 2013-10-13
+// Last Modification: 2013-10-14
 // Description		:
 //
 
@@ -29,9 +29,9 @@ unsigned int qHash(State key)
     return hash;
 }
 
-State::State(int *buffer)
+State::State(char *buffer)
     : grids()
-    , drops()
+    , drops(nullptr)
     , prev(nullptr)
     , water(0)
     , combo(0)
@@ -71,6 +71,7 @@ State* State::addWater(int x, int y)
     }
 
     State* newState = new State(*this);
+    newState->drops = new QList<Drop*>[4];
     newState->water = water - 1;
     newState->combo = 0;
     newState->prev = this;
@@ -84,6 +85,7 @@ State* State::addWater(int x, int y)
         newState->checkBurst();
     } while (!newState->isDropsEmpty());
     newState->combo = 0;
+    SAFE_DELETE_ARRAY(newState->drops);
     return newState;
 }
 
@@ -122,7 +124,7 @@ int State::getY()
 
 int State::getG()
 {
-    return 0;
+    return deep;
 }
 
 int State::getH()

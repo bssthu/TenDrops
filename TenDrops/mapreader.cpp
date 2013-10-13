@@ -4,14 +4,14 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-11
-// Last Modification: 2013-10-11
+// Last Modification: 2013-10-14
 // Description		:
 //
 
 #include "mapreader.h"
 #include <stdio.h>
 
-bool MapReader::readMap(const char *filename, int* buffer)
+bool MapReader::readMap(const char *filename, char* buffer)
 {
     FILE* fp = nullptr;
     fopen_s(&fp, filename, "rt");
@@ -22,18 +22,20 @@ bool MapReader::readMap(const char *filename, int* buffer)
 
     for (int i = 0; i < 36; i++)
     {
-        if (fscanf(fp, "%d", &buffer[i]) != 1)
+        int tmp;
+        if (fscanf(fp, "%d", &tmp) != 1)
         {
             fclose(fp);
             return false;
         }
+        buffer[i] = tmp;
     }
 
     fclose(fp);
     return true;
 }
 
-void MapReader::saveMap(const char *filename, int* buffer)
+void MapReader::saveMap(const char *filename, char *buffer)
 {
     FILE* fp = nullptr;
     fopen_s(&fp, filename, "wt");

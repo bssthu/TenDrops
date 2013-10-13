@@ -1,3 +1,13 @@
+//
+// Module			: gridgraphics.cpp
+// Author			: bss
+// Project			: TenDrops
+// State			:
+// Creation Date	: 2013-10-10
+// Last Modification: 2013-10-14
+// Description		:
+//
+
 #include "gridgraphics.h"
 #include <qpainter.h>
 

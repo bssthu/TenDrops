@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-08
-// Last Modification: 2013-10-13
+// Last Modification: 2013-10-14
 // Description		:
 //
 
@@ -15,7 +15,7 @@ Grid::Grid()
 {
 }
 
-void Grid::setDropSize(int size)
+void Grid::setDropSize(char size)
 {
     if (size < 0)
     {

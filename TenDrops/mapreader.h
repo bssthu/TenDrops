@@ -16,8 +16,8 @@ class MapReader
 public:
     MapReader() = delete;
 
-    static bool readMap(const char* filename, int* buffer);
-    static void saveMap(const char* filename, int* buffer);
+    static bool readMap(const char* filename, char *buffer);
+    static void saveMap(const char* filename, char* buffer);
 };
 
 #endif // MAPREADER_H

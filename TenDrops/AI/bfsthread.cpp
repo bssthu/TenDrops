@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-13
-// Last Modification: 2013-10-13
+// Last Modification: 2013-10-14
 // Description		:
 //
 
@@ -13,12 +13,16 @@
 #include "state.h"
 #include "Macro.h"
 
+bool BFSThread::isBFS = true;
+
 BFSThread::BFSThread(State* state, int water, QObject *parent)
     : MyThread(water, parent)
     , open()
     , closed()
     , deep(0)
+    , isOutOfMemory(false)
 {
+    state->setWater(water);
     open.insert(state);
 }
 
@@ -27,6 +31,7 @@ void BFSThread::run()
     State* finalState = nullptr;
     do
     {
+        ++deep;
         finalState = bfs_traversal();
         if (open.size() == 0)
         {
@@ -34,7 +39,6 @@ void BFSThread::run()
             isSucceed = true;
             return;
         }
-        ++deep;
     } while (nullptr == finalState && !isExit);
     if (isExit)
     {
@@ -67,13 +71,30 @@ State* BFSThread::bfs_traversal()
 {
     int i = 0;
     int iEnd = open.size();
-    for (QSet<State*>::iterator it = open.begin(); i < iEnd; ++i)
+    for (QSet<State*>::iterator it = open.begin(); i < iEnd && it != open.end(); ++i)
     {
+        if (open.size() + closed.size() > 10000000)
+        {
+            isExit = true;
+            isOutOfMemory = true;
+        }
         if (isExit)
         {
             return nullptr;
         }
         State* curState = *it;
+//        if (curState->getG() > deep)    // 保证是严格的宽度优先搜索
+//        {
+//            ++it;
+//            continue;
+//        }
+        // 水不能为负
+        if (curState->getWater() <= 1)
+        {
+            it = open.erase(it);
+            closed.insert(curState);
+            continue;
+        }
         for (int x = 0; x < 6; ++x)
         {
             for (int y = 0; y < 6; ++y)
@@ -98,21 +119,15 @@ State* BFSThread::bfs_traversal()
 
 void BFSThread::bfs_addToOpenList(State* newState)
 {
-    for (QSet<State*>::iterator it = open.begin(); it != open.end(); ++it)
+    if (open.contains(newState))
     {
-        if (*newState == *(*it))
-        {
-            SAFE_DELETE(newState);
-            return;
-        }
+        SAFE_DELETE(newState);
+        return;
     }
-    for (QSet<State*>::iterator it = closed.begin(); it != closed.end(); ++it)
+    if (closed.contains(newState))
     {
-        if (*newState == *(*it))
-        {
-            SAFE_DELETE(newState);
-            return;
-        }
+        SAFE_DELETE(newState);
+        return;
     }
     open.insert(newState);
 }
@@ -144,5 +159,14 @@ QString BFSThread::getInfo()
         openSize = open.size();
         closedSize = closed.size();
     }
-    return QString("open=%1; closed=%2; deep=%3").arg(openSize).arg(closedSize).arg(deep);
+    QString str = QString("open=%1; closed=%2; round=%3").arg(openSize).arg(closedSize).arg(deep);
+    if (isOutOfMemory)
+    {
+        str.append("; 内存耗尽，无解");
+    }
+    if ((isSucceed || isExit) && isRunning())
+    {
+        str.append("; 正在释放资源");
+    }
+    return str;
 }

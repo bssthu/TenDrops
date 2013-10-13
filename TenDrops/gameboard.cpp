@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-13
+// Last Modification: 2013-10-14
 // Description		:
 //
 
@@ -98,7 +98,7 @@ void GameBoard::step()
 
 void GameBoard::onLoadMap(const char* filename)
 {
-    int buffer[36];
+    char buffer[36];
     if (MapReader::readMap(filename, buffer))
     {
         for (int x = 0; x < 6; ++x)
@@ -114,7 +114,7 @@ void GameBoard::onLoadMap(const char* filename)
 
 void GameBoard::onSaveMap()
 {
-    int buffer[36];
+    char buffer[36];
     for (int x = 0; x < 6; ++x)
     {
         for (int y = 0; y < 6; ++y)
@@ -127,7 +127,7 @@ void GameBoard::onSaveMap()
 
 void GameBoard::onBFS()
 {
-    int buffer[36];
+    char buffer[36];
     for (int x = 0; x < 6; ++x)
     {
         for (int y = 0; y < 6; ++y)
@@ -136,6 +136,7 @@ void GameBoard::onBFS()
         }
     }
     State* state = new State(buffer);
+    SAFE_DELETE(thread);
     thread = new BFSThread(state, water);
     thread->start();
     emit beginAutoCalc();
@@ -143,7 +144,7 @@ void GameBoard::onBFS()
 
 void GameBoard::onDFS()
 {
-    int buffer[36];
+    char buffer[36];
     for (int x = 0; x < 6; ++x)
     {
         for (int y = 0; y < 6; ++y)
@@ -152,6 +153,7 @@ void GameBoard::onDFS()
         }
     }
     State* state = new State(buffer);
+    SAFE_DELETE(thread);
     thread = new DFSThread(state, water);
     thread->start();
     emit beginAutoCalc();
@@ -161,7 +163,7 @@ void GameBoard::nextOper()
 {
     if (nullptr != thread)
     {
-        if (thread->succeed())
+        if (thread->succeed() && !thread->isRunning())
         {
             MyThread::Point pt = thread->nextOper();
             if (pt.x < 0)
@@ -170,6 +172,7 @@ void GameBoard::nextOper()
             }
             else
             {
+                emit setDropsLeft(--water);
                 grids[pt.y * 6 + pt.x]->addDrop();
                 checkBurst();
             }
