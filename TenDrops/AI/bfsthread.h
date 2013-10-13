@@ -12,6 +12,7 @@
 #define BFSTHREAD_H
 
 #include "mythread.h"
+#include <QLinkedList>
 
 class BFSThread : public MyThread
 {
@@ -26,10 +27,15 @@ public slots:
 
 protected:
     void run();
+    void deleteElements();
 
 private:
     State *bfs_traversal();
     void bfs_addToOpenList(State* newState);
+
+private:
+    QLinkedList<State*> open;
+    QLinkedList<State*> closed;
     int deep;
 };
 

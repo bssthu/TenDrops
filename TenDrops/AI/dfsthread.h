@@ -12,6 +12,8 @@
 #define DFSTHREAD_H
 
 #include "mythread.h"
+#include <set>
+#include <QStack>
 
 class DFSThread : public MyThread
 {
@@ -21,6 +23,10 @@ public:
 
 protected:
     void run();
+
+private:
+    std::set<State*> open;
+    QStack<State*> closed;
 };
 
 #endif // DFSTHREAD_H

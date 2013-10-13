@@ -12,7 +12,6 @@
 #define MYTHREAD_H
 
 #include <QThread>
-#include <QLinkedList>
 
 class State;
 
@@ -27,7 +26,7 @@ public:
     };
 
 public:
-    explicit MyThread(State* state, int water, QObject *parent = 0);
+    explicit MyThread(int water, QObject *parent = 0);
     ~MyThread();
 
     virtual QString getInfo() = 0;
@@ -39,14 +38,12 @@ signals:
 public slots:
 
 protected:
-    void deleteList();
+    virtual void deleteElements() { }
 
 public:
     volatile bool isExit;
 
 protected:
-    QLinkedList<State*> open;
-    QLinkedList<State*> closed;
     int openSize;
     int closedSize;
     int water;

@@ -14,9 +14,12 @@
 #include "Macro.h"
 
 BFSThread::BFSThread(State* state, int water, QObject *parent)
-    : MyThread(state, water, parent)
+    : MyThread(water, parent)
+    , open()
+    , closed()
     , deep(0)
 {
+    open.push_back(state);
 }
 
 void BFSThread::run()
@@ -35,7 +38,7 @@ void BFSThread::run()
     } while (nullptr == finalState && !isExit);
     if (isExit)
     {
-        deleteList();
+        deleteElements();
         return;
     }
 
@@ -57,7 +60,7 @@ void BFSThread::run()
     }
 
     isSucceed = true;
-    deleteList();
+    deleteElements();
 }
 
 State* BFSThread::bfs_traversal()
@@ -112,6 +115,26 @@ void BFSThread::bfs_addToOpenList(State* newState)
         }
     }
     open.push_back(newState);
+}
+
+void BFSThread::deleteElements()
+{
+    openSize = open.size();
+    for (QLinkedList<State*>::iterator it = open.begin(); it != open.end(); )
+    {
+        State* state = *it;
+        ++it;
+        SAFE_DELETE(state);
+    }
+    open.clear();
+    closedSize = closed.size();
+    for (QLinkedList<State*>::iterator it = closed.begin(); it != closed.end(); )
+    {
+        State* state = *it;
+        ++it;
+        SAFE_DELETE(state);
+    }
+    closed.clear();
 }
 
 QString BFSThread::getInfo()

@@ -13,10 +13,28 @@
 #include "Macro.h"
 #include <drop.h>
 
+unsigned int qHash(State key)
+{
+    // Robert Sedgwicks, Algorithms in C
+    unsigned int b = 378551;
+    unsigned int a = 63689;
+    unsigned int hash = 0;
+    int buffer[36];
+    key.getDropsSize(buffer);
+    for (int i = 0; i < 36; ++i)
+    {
+        hash = hash * a + buffer[i];
+        a = a * b;
+    }
+    return hash;
+}
+
 State::State(int *buffer)
     : grids()
     , drops()
     , prev(nullptr)
+    , water(0)
+    , combo(0)
     , deep(0)
     , x(-1)
     , y(-1)
@@ -29,6 +47,21 @@ bool State::operator ==(State& state)
     return 0 == memcmp(grids, state.grids, sizeof(grids));
 }
 
+bool State::operator <(State& state)
+{
+    return getF() < state.getF();
+}
+
+void State::setWater(int dropsLeft)
+{
+    water = dropsLeft;
+}
+
+int State::getWater()
+{
+    return water;
+}
+
 State* State::addWater(int x, int y)
 {
     int index = y * 6 + x;
@@ -38,6 +71,8 @@ State* State::addWater(int x, int y)
     }
 
     State* newState = new State(*this);
+    newState->water = water - 1;
+    newState->combo = 0;
     newState->prev = this;
     newState->deep = deep + 1;
     newState->x = x;
@@ -48,6 +83,7 @@ State* State::addWater(int x, int y)
         newState->checkDrops();
         newState->checkBurst();
     } while (!newState->isDropsEmpty());
+    newState->combo = 0;
     return newState;
 }
 
@@ -82,6 +118,21 @@ int State::getX()
 int State::getY()
 {
     return y;
+}
+
+int State::getG()
+{
+    return 0;
+}
+
+int State::getH()
+{
+    return 0;
+}
+
+int State::getF()
+{
+    return getG() + getH();
 }
 
 void State::checkDrops()
@@ -119,6 +170,12 @@ void State::checkBurst()
         {
             if (grids[y * 6 + x].checkBurst())
             {
+                ++combo;
+                if (combo >= 3)
+                {
+                    combo = 0;
+                    ++water;
+                }
                 addDrops(x, y);
             }
         }

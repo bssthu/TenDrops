@@ -15,6 +15,9 @@
 #include <QList>
 
 class Drop;
+class State;
+
+unsigned int qHash(State key);
 
 class State
 {
@@ -23,7 +26,11 @@ public:
 
     // compare drop size
     bool operator ==(State& state);
+    // sort by f
+    bool operator <(State& state);
 
+    void setWater(int dropsLeft);
+    int getWater();
     State* addWater(int x, int y);
     void getDropsSize(int *buffer);
     bool isClear();
@@ -31,6 +38,10 @@ public:
     State* getPrev();
     int getX();
     int getY();
+
+    int getG();
+    int getH();
+    int getF();
 
 private:
     void checkDrops();
@@ -42,6 +53,8 @@ private:
     Grid grids[36];
     QList<Drop*> drops[4];
     State* prev;
+    int water;
+    int combo;
     int deep;
     int x, y;
 };

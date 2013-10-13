@@ -12,11 +12,9 @@
 #include "Macro.h"
 #include "state.h"
 
-MyThread::MyThread(State *state, int water, QObject *parent)
+MyThread::MyThread(int water, QObject *parent)
     : QThread(parent)
     , isExit(false)
-    , open()
-    , closed()
     , openSize(0)
     , closedSize(0)
     , water(water)
@@ -25,13 +23,12 @@ MyThread::MyThread(State *state, int water, QObject *parent)
     , steps(0)
     , stepsCompleted(0)
 {
-    open.push_back(state);
 }
 
 MyThread::~MyThread()
 {
     SAFE_DELETE_ARRAY(opers);
-    deleteList();
+    deleteElements();
 }
 
 bool MyThread::succeed()
@@ -48,24 +45,4 @@ MyThread::Point MyThread::nextOper()
         return pt;
     }
     return opers[stepsCompleted++];
-}
-
-void MyThread::deleteList()
-{
-    openSize = open.size();
-    for (QLinkedList<State*>::iterator it = open.begin(); it != open.end(); )
-    {
-        State* state = *it;
-        ++it;
-        SAFE_DELETE(state);
-    }
-    open.clear();
-    closedSize = closed.size();
-    for (QLinkedList<State*>::iterator it = closed.begin(); it != closed.end(); )
-    {
-        State* state = *it;
-        ++it;
-        SAFE_DELETE(state);
-    }
-    closed.clear();
 }
