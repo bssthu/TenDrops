@@ -38,25 +38,6 @@ DropGraphics* drop = nullptr;
 
 void GameBoard::onClicked(const QPointF *point)
 {
-    DropGraphics* drop = nullptr;
-    for (std::list<DropGraphics*>::iterator it = deadDrops.begin(); it != deadDrops.end(); )
-    {
-        drop = *it;
-        if (nullptr != drop->parentItem())
-        {
-            qDebug("parentItem");
-        }
-        if (nullptr != drop->parentObject())
-        {
-            qDebug("parentObject");
-        }
-        if (nullptr != drop->parentWidget())
-        {
-            qDebug("parentWidget");
-        }
-        ++it;// = deadDrops.erase(it);
-    }
-    SAFE_DELETE(drop);
     // 判断格子
     int x = GridGraphics::getCoordX(point->x());
     int y = GridGraphics::getCoordY(point->y());
@@ -126,7 +107,6 @@ void GameBoard::onLoadMap(const char* filename)
         }
     }
     emit updated();
-    state = new State(buffer);
 }
 
 void GameBoard::onSaveMap()
@@ -156,8 +136,7 @@ void GameBoard::checkDrops()
                 // Remove
                 scene->removeItem(drop);
                 it = drops[i].erase(it);
-                deadDrops.push_back(drop);
-                //SAFE_DELETE(drop);
+                SAFE_DELETE(drop);
             }
             // 碰到水滴
             else if (grids[drop->Drop::y() * 6 + drop->Drop::x()]->canAcceptDrop())
@@ -166,8 +145,7 @@ void GameBoard::checkDrops()
                 // Remove
                 scene->removeItem(drop);
                 it = drops[i].erase(it);
-                deadDrops.push_back(drop);
-                //SAFE_DELETE(drop);
+                SAFE_DELETE(drop);
             }
             else
             {

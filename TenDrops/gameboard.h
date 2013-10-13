@@ -61,8 +61,6 @@ private:
     // 动画相关
     int moves;
     static const int MAX_MOVE = 10;
-
-    State* state;
 };
 
 #endif // GAMEBOARD_H

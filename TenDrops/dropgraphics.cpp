@@ -34,7 +34,7 @@ DropGraphics::DropGraphics(DropFrom dropFrom, int x, int y)
 
 QRectF DropGraphics::boundingRect() const
 {
-    return rect;
+    return QRectF(GRID_SX, GRID_SY, GRID_DX * 6, GRID_DY * 6);
 }
 
 void DropGraphics::paint(QPainter *painter, const QStyleOptionGraphicsItem */*option*/, QWidget */*widget*/)

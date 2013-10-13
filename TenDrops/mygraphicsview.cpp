@@ -23,6 +23,8 @@ MyGraphicsView::MyGraphicsView(QWidget *parent)
     , text(new QGraphicsTextItem())
 {
     initUI();
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void MyGraphicsView::initUI()
