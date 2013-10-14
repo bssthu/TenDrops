@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
 #ifdef QT_DEBUG
     QDir::setCurrent("C://Projects//TenDrops//TenDrops");
 #endif
+    QApplication::addLibraryPath("./plugins");
     QApplication a(argc, argv);
 
     MainWindow w;
