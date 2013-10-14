@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-13
-// Last Modification: 2013-10-13
+// Last Modification: 2013-10-14
 // Description		: Thread for AI.
 //
 
@@ -39,6 +39,7 @@ public slots:
 
 protected:
     virtual void deleteElements() { }
+    void traceBackState(State* state);
 
 public:
     volatile bool isExit;
@@ -51,6 +52,8 @@ protected:
     Point* opers;
     int steps;
     int stepsCompleted;
+    QTime* time;
+    float elapsedSec;
 };
 
 #endif // MYTHREAD_H

@@ -30,8 +30,8 @@ protected:
     void deleteElements();
 
 private:
-    State *bfs_traversal();
-    void bfs_addToOpenList(State* newState);
+    State *traversal();
+    void addToOpenList(State* newState);
 
 public:
     static bool isBFS;

@@ -13,6 +13,7 @@
 
 #include "mythread.h"
 #include <QList>
+#include <QVector>
 #include <QStack>
 
 class DFSThread : public MyThread
@@ -25,7 +26,11 @@ protected:
     void run();
 
 private:
-    QList<State*> open;
+    State *traversal();
+    void addToOpenList(State* newState);
+
+private:
+    QVector<State*> open;
     QStack<State*> closed;
 };
 

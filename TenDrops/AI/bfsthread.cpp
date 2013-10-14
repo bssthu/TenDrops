@@ -9,7 +9,7 @@
 //
 
 #include "bfsthread.h"
-#include <QStack>
+#include <QTime>
 #include "state.h"
 #include "Macro.h"
 
@@ -28,11 +28,12 @@ BFSThread::BFSThread(State* state, int water, QObject *parent)
 
 void BFSThread::run()
 {
+    time->start();
     State* finalState = nullptr;
     do
     {
         ++deep;
-        finalState = bfs_traversal();
+        finalState = traversal();
         if (open.size() == 0)
         {
             steps = 0;
@@ -46,28 +47,14 @@ void BFSThread::run()
         return;
     }
 
-    QStack<State*> stack;
-    do
-    {
-        stack.push(finalState);
-        finalState = finalState->getPrev();
-    } while (nullptr != finalState);
-
-    opers = new Point[stack.size()];
-    steps = stack.size() - 1;  // Skip first state
-    finalState = stack.pop();
-    for (int i = 0; i < steps; ++i)
-    {
-        finalState = stack.pop();
-        opers[i].x = finalState->getX();
-        opers[i].y = finalState->getY();
-    }
+    traceBackState(finalState);
 
     isSucceed = true;
+    elapsedSec = (float)time->elapsed() / 1000.0f;
     deleteElements();
 }
 
-State* BFSThread::bfs_traversal()
+State* BFSThread::traversal()
 {
     int i = 0;
     int iEnd = open.size();
@@ -89,7 +76,7 @@ State* BFSThread::bfs_traversal()
 //            continue;
 //        }
         // 水不能为负
-        if (curState->getWater() <= 1)
+        if (curState->getWater() <= 0)
         {
             it = open.erase(it);
             closed.insert(curState);
@@ -104,10 +91,10 @@ State* BFSThread::bfs_traversal()
                 {
                     if (newState->isClear())
                     {
-                        bfs_addToOpenList(newState);
+                        addToOpenList(newState);
                         return newState;
                     }
-                    bfs_addToOpenList(newState);
+                    addToOpenList(newState);
                 }
             }
         }
@@ -117,7 +104,7 @@ State* BFSThread::bfs_traversal()
     return nullptr;
 }
 
-void BFSThread::bfs_addToOpenList(State* newState)
+void BFSThread::addToOpenList(State* newState)
 {
     if (open.contains(newState))
     {
@@ -158,11 +145,16 @@ QString BFSThread::getInfo()
     {
         openSize = open.size();
         closedSize = closed.size();
+        elapsedSec = (float)time->elapsed() / 1000.0f;
     }
-    QString str = QString("open=%1; closed=%2; round=%3").arg(openSize).arg(closedSize).arg(deep);
+    QString str = QString("open=%1; closed=%2; round=%3; elapsed=%4s").arg(openSize).arg(closedSize).arg(deep).arg(elapsedSec);
     if (isOutOfMemory)
     {
         str.append("; 内存耗尽，无解");
+    }
+    if (0 == openSize && isSucceed)
+    {
+        str.append("; 已遍历所有情况，无解");
     }
     if ((isSucceed || isExit) && isRunning())
     {

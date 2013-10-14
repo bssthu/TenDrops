@@ -84,6 +84,7 @@ void GameBoard::step()
                 && drops[2].size() == 0
                 && drops[3].size() == 0)
         {
+            combo = 0;
             emit endRound();
         }
         moves = 0;
@@ -174,7 +175,7 @@ void GameBoard::nextOper()
             {
                 emit setDropsLeft(--water);
                 grids[pt.y * 6 + pt.x]->addDrop();
-                checkBurst();
+                //checkBurst();
             }
         }
         else if (thread->isExit)
