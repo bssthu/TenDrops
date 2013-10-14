@@ -10,17 +10,16 @@
 
 #include "mainwindow.h"
 #include <QApplication>
-#include <QTranslator>
-#include <QTextCodec>
+
+#ifdef QT_DEBUG
 #include <QDir>
-#include <QtPlugin>
+#endif
 
 int main(int argc, char *argv[])
 {
 #ifdef QT_DEBUG
     QDir::setCurrent("C://Projects//TenDrops//TenDrops");
 #endif
-    QApplication::addLibraryPath("/plugins");
     QApplication a(argc, argv);
 
     MainWindow w;
