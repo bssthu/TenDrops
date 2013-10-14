@@ -18,6 +18,7 @@ DFSThread::DFSThread(State *state, int water, QObject *parent)
     , open()
     , closed()
 {
+    state->calcH();
     open.push_back(state);
 }
 
@@ -25,20 +26,35 @@ void DFSThread::run()
 {
     time->start();
     State* finalState = nullptr;
-    do
+    for (deep = water; deep <= water && nullptr == finalState; ++deep)
     {
-        finalState = traversal();
-        if (open.size() == 0)
+        do
         {
-            steps = 0;
-            isSucceed = true;
+            finalState = traversal();
+            if (open.size() == 0)
+            {
+                steps = 0;
+                break;
+            }
+            if (open.size() + closed.size() > 10000000)
+            {
+                isExit = true;
+                isOutOfMemory = true;
+                deleteElements();
+                return;
+            }
+        } while (nullptr == finalState && !isExit);
+
+        if (isExit)
+        {
+            deleteElements();
             return;
         }
-    } while (nullptr == finalState && !isExit);
-    if (isExit)
-    {
-        deleteElements();
-        return;
+
+        if (nullptr == finalState)
+        {
+            closedToOpen();
+        }
     }
 
     traceBackState(finalState);
@@ -50,12 +66,12 @@ void DFSThread::run()
 
 State* DFSThread::traversal()
 {
-    State* curState = open.last();
+    std::sort(open.begin(), open.end(), compLess);
+    State* curState = open[open.size() - 1];
     open.pop_back();
     closed.insert(curState);
-    closedSize++;
     // 水不能为负
-    if (curState->getG() >= water)
+    if (curState->getG() >= deep)
     {
         return nullptr;
     }
@@ -80,7 +96,7 @@ State* DFSThread::traversal()
 
 void DFSThread::addToOpenList(State* newState)
 {
-    for (QVector<State*>::iterator it = open.begin(); it != open.end(); )
+    for (std::vector<State*>::iterator it = open.begin(); it != open.end(); )
     {
         State* state = *it;
         if (*state == *newState)
@@ -106,13 +122,25 @@ void DFSThread::addToOpenList(State* newState)
         SAFE_DELETE(newState);
         return;
     }
+    newState->calcH();
     open.push_back(newState);
+}
+
+void DFSThread::closedToOpen()
+{
+    for (QSet<State*>::iterator it = closed.begin(); it != closed.end(); )
+    {
+        State* state = *it;
+        ++it;
+        open.push_back(state);
+    }
+    closed.clear();
 }
 
 void DFSThread::deleteElements()
 {
     openSize = open.size();
-    for (QVector<State*>::iterator it = open.begin(); it != open.end(); )
+    for (std::vector<State*>::iterator it = open.begin(); it != open.end(); )
     {
         State* state = *it;
         ++it;
@@ -137,7 +165,8 @@ QString DFSThread::getInfo()
         closedSize = closed.size();
         elapsedSec = (float)time->elapsed() / 1000.0f;
     }
-    QString str = QString("open=%1; closed=%2; elapsed=%3s").arg(openSize).arg(closedSize).arg(elapsedSec);
+    QString str = QString("open=%1; closed=%2; round=%3; elapsed=%4s")
+            .arg(openSize).arg(closedSize).arg(deep).arg(elapsedSec);
     if (0 == openSize && isSucceed)
     {
         str.append("; 已遍历所有情况，无解");

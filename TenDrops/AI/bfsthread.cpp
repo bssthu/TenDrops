@@ -19,8 +19,6 @@ BFSThread::BFSThread(State* state, int water, QObject *parent)
     : MyThread(water, parent)
     , open()
     , closed()
-    , deep(0)
-    , isOutOfMemory(false)
 {
     open.insert(state);
 }
@@ -146,7 +144,8 @@ QString BFSThread::getInfo()
         closedSize = closed.size();
         elapsedSec = (float)time->elapsed() / 1000.0f;
     }
-    QString str = QString("open=%1; closed=%2; round=%3; elapsed=%4s").arg(openSize).arg(closedSize).arg(deep).arg(elapsedSec);
+    QString str = QString("open=%1; closed=%2; round=%3; elapsed=%4s")
+            .arg(openSize).arg(closedSize).arg(deep).arg(elapsedSec);
     if (isOutOfMemory)
     {
         str.append("; 内存耗尽，无解");

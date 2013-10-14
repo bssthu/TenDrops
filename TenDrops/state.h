@@ -19,6 +19,8 @@ class State;
 
 unsigned int qHash(State *key);
 
+bool compLess(State* lhs, State *rhs);
+
 class State
 {
 public:
@@ -41,6 +43,7 @@ public:
     int getY();
 
     int getG();
+    void calcH();
     int getH();
     int getF();
 
@@ -57,6 +60,7 @@ private:
     char water;
     char combo;
     char x, y;
+    char h;
 };
 
 #endif // STATE_H

@@ -21,11 +21,13 @@ MyThread::MyThread(int water, QObject *parent)
     , closedSize(0)
     , isSucceed(false)
     , water(water)
+    , deep(0)
     , steps(0)
     , stepsCompleted(0)
     , opers(nullptr)
     , time(new QTime())
     , elapsedSec(0.0f)
+    , isOutOfMemory(false)
 {
 }
 
@@ -39,6 +41,11 @@ MyThread::~MyThread()
 bool MyThread::succeed()
 {
     return isSucceed;
+}
+
+int MyThread::getRemainSteps()
+{
+    return steps - stepsCompleted;
 }
 
 MyThread::Point MyThread::nextOper()

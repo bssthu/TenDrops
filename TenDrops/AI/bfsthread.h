@@ -39,8 +39,6 @@ public:
 private:
     QSet<State*> open;
     QSet<State*> closed;
-    int deep;
-    bool isOutOfMemory;
 };
 
 #endif // BFSTHREAD_H

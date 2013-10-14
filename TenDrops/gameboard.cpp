@@ -175,7 +175,6 @@ void GameBoard::nextOper()
             {
                 emit setDropsLeft(--water);
                 grids[pt.y * 6 + pt.x]->addDrop();
-                //checkBurst();
             }
         }
         else if (thread->isExit)
@@ -293,7 +292,14 @@ void GameBoard::checkCalcResult()
     {
         if (thread->succeed())
         {
-            emit calcOK();
+            if (thread->getRemainSteps() > 0)
+            {
+                emit calcOK();
+            }
+            else
+            {
+                emit endAutoRun();
+            }
         }
         else if (thread->isExit)
         {

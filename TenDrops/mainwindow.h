@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-08
-// Last Modification: 2013-10-11
+// Last Modification: 2013-10-14
 // Description		: Game controller.
 //
 
@@ -12,6 +12,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "mygraphicsview.h"
 
 namespace Ui {
 class MainWindow;
@@ -39,12 +40,16 @@ private slots:
     void on_savePushButton_clicked();
     void on_bfsPushButton_clicked();
     void on_dfsPushButton_clicked();
+    void on_runPushButton_clicked();
+    void on_stepRadioButton_toggled();
     void on_abortPushButton_clicked();
     void on_debugPushButton_clicked();
     void on_exitAction_triggered();
     void on_aboutAction_triggered();
 
     void checkThreadInfo();
+
+    void onSetUIMode(MyGraphicsView::UIMode uiMode);
 
 protected:
     void closeEvent(QCloseEvent* event);
@@ -54,7 +59,8 @@ private:
 
 private:
     Ui::MainWindow *ui;
-    QLabel* label;
+    QLabel* infoLabel;
+    QLabel* modeLabel;
     QTimer* timer;
 };
 

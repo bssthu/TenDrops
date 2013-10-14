@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-08
-// Last Modification: 2013-10-13
+// Last Modification: 2013-10-14
 // Description		:
 //
 
@@ -17,11 +17,11 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , label(new QLabel(this))
+    , infoLabel(new QLabel(this))
+    , modeLabel(new QLabel(this))
     , timer(new QTimer(this))
 {
     ui->setupUi(this);
-    ui->statusBar->addWidget(label);
     initUI();
     timer->start(500);
 }
@@ -34,6 +34,10 @@ MainWindow::~MainWindow()
 void MainWindow::initUI()
 {
     setWindowIcon(QIcon("://Data//icon.ico"));
+    ui->statusBar->addWidget(modeLabel);
+    ui->statusBar->addWidget(infoLabel);
+    onSetUIMode(MyGraphicsView::UIMode::FREE);
+
     connect(this, &MainWindow::loadMap, ui->graphicsView, &MyGraphicsView::onLoadMap);
     connect(this, &MainWindow::saveMap, ui->graphicsView, &MyGraphicsView::onSaveMap);
     connect(this, &MainWindow::sigDebug, ui->graphicsView, &MyGraphicsView::onDebug);
@@ -41,6 +45,7 @@ void MainWindow::initUI()
     connect(this, &MainWindow::dfs, ui->graphicsView, &MyGraphicsView::onDFS);
     connect(timer, &QTimer::timeout, ui->graphicsView, &MyGraphicsView::checkThreadResult);
     connect(timer, &QTimer::timeout, this, &MainWindow::checkThreadInfo);
+    connect(ui->graphicsView, &MyGraphicsView::setUIMode, this, &MainWindow::onSetUIMode);
 }
 
 void MainWindow::on_loadPushButton_clicked()
@@ -61,6 +66,16 @@ void MainWindow::on_bfsPushButton_clicked()
 void MainWindow::on_dfsPushButton_clicked()
 {
     emit dfs();
+}
+
+void MainWindow::on_runPushButton_clicked()
+{
+    ui->graphicsView->onBeginAutoRun();
+}
+
+void MainWindow::on_stepRadioButton_toggled()
+{
+    ui->graphicsView->onSetSingleStep(ui->stepRadioButton->isChecked());
 }
 
 void MainWindow::on_abortPushButton_clicked()
@@ -85,11 +100,66 @@ void MainWindow::on_aboutAction_triggered()
 
 void MainWindow::checkThreadInfo()
 {
-    label->setText(ui->graphicsView->checkThreadInfo());
+    infoLabel->setText(ui->graphicsView->checkThreadInfo());
+}
+
+void MainWindow::onSetUIMode(MyGraphicsView::UIMode uiMode)
+{
+    switch (uiMode)
+    {
+    case MyGraphicsView::UIMode::FREE:
+        modeLabel->setText("空闲　　");
+        ui->loadPushButton->setEnabled(true);
+        ui->savePushButton->setEnabled(true);
+        ui->bfsPushButton->setEnabled(true);
+        ui->dfsPushButton->setEnabled(true);
+        ui->runPushButton->setEnabled(false);
+        break;
+
+    case MyGraphicsView::UIMode::MANUALRUN:
+        modeLabel->setText("手动回合");
+        ui->loadPushButton->setEnabled(false);
+        ui->savePushButton->setEnabled(false);
+        ui->bfsPushButton->setEnabled(false);
+        ui->dfsPushButton->setEnabled(false);
+        ui->runPushButton->setEnabled(false);
+        break;
+
+    case MyGraphicsView::UIMode::AUTORUN:
+        modeLabel->setText("自动回合");
+        ui->loadPushButton->setEnabled(false);
+        ui->savePushButton->setEnabled(false);
+        ui->bfsPushButton->setEnabled(false);
+        ui->dfsPushButton->setEnabled(false);
+        ui->runPushButton->setEnabled(false);
+        break;
+
+    case MyGraphicsView::UIMode::AUTOCALC:
+        modeLabel->setText("自动计算");
+        ui->loadPushButton->setEnabled(false);
+        ui->savePushButton->setEnabled(false);
+        ui->bfsPushButton->setEnabled(false);
+        ui->dfsPushButton->setEnabled(false);
+        ui->runPushButton->setEnabled(false);
+        break;
+
+    case MyGraphicsView::UIMode::CALCOK:
+        modeLabel->setText("计算完成");
+        ui->loadPushButton->setEnabled(false);
+        ui->savePushButton->setEnabled(false);
+        ui->bfsPushButton->setEnabled(false);
+        ui->dfsPushButton->setEnabled(false);
+        ui->runPushButton->setEnabled(true);
+        break;
+
+    default:
+        modeLabel->setText("??　　　");
+        break;
+    }
 }
 
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
-    label->setText(label->text().append("; 正在关闭，请稍候"));
+    infoLabel->setText(infoLabel->text().append("; 正在关闭，请稍候"));
     ui->graphicsView->onClose();
 }

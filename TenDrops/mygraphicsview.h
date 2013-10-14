@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-13
+// Last Modification: 2013-10-14
 // Description		: My QGraphicsView.
 //
 
@@ -19,9 +19,20 @@ class MyGraphicsView : public QGraphicsView
 {
     Q_OBJECT
 public:
+    enum class UIMode
+    {
+        FREE,
+        MANUALRUN,
+        AUTORUN,
+        AUTOCALC,
+        CALCOK
+    };
+
+public:
     explicit MyGraphicsView(QWidget *parent = 0);
 
 signals:
+    void setUIMode(MyGraphicsView::UIMode uiMode);
 
 public slots:
     virtual void mousePressEvent(QMouseEvent *event);
@@ -33,12 +44,16 @@ public slots:
     void endAutoRun();
     void beginAutoCalc();
     void calcOK();
+
     void onLoadMap(const char* filename);
     void onSaveMap();
     void onDebug(void*);
     void onSetDropsLeft(int dropNum);
     void onBFS();
     void onDFS();
+    void onBeginAutoRun();
+    void onSetSingleStep(bool isSingle);
+
     void onClose();
     QString checkThreadInfo();
     void checkThreadResult();
@@ -48,18 +63,11 @@ private:
     void initUI();
 
 private:
-    enum class UIMode
-    {
-        FREE,
-        MANUALRUN,
-        AUTORUN,
-        AUTOCALC,
-        CALCOK
-    };
     UIMode uiMode;
     GameBoard* gameboard;
     QTimer* timer;
     QGraphicsTextItem* text;
+    bool isSingleStep;
 };
 
 #endif // MYGRAPHICSVIEW_H

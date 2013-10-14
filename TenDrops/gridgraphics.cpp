@@ -34,7 +34,7 @@ QRectF GridGraphics::boundingRect() const
 
 void GridGraphics::paint(QPainter *painter, const QStyleOptionGraphicsItem */*option*/, QWidget */*widget*/)
 {
-    painter->drawImage(boundingRect(), img[dropSize_]);
+    painter->drawImage(boundingRect(), img[(int)dropSize_]);
 }
 
 int GridGraphics::getCoordX(float x)

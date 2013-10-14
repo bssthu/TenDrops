@@ -31,6 +31,7 @@ public:
 
     virtual QString getInfo() = 0;
     bool succeed();
+    int getRemainSteps();
     Point nextOper();
 
 signals:
@@ -49,11 +50,13 @@ protected:
     int closedSize;
     bool isSucceed;
     char water;
+    int deep;
     char steps;
     char stepsCompleted;
     Point* opers;
     QTime* time;
     float elapsedSec;
+    bool isOutOfMemory;
 };
 
 #endif // MYTHREAD_H

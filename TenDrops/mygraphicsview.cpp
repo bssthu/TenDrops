@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-13
+// Last Modification: 2013-10-14
 // Description		:
 //
 
@@ -21,6 +21,7 @@ MyGraphicsView::MyGraphicsView(QWidget *parent)
     , gameboard(NULL)
     , timer(new QTimer(this))
     , text(new QGraphicsTextItem())
+    , isSingleStep(true)
 {
     initUI();
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -74,6 +75,7 @@ void MyGraphicsView::beginManualRun()
     if (UIMode::FREE == uiMode)
     {
         uiMode = UIMode::MANUALRUN;
+        emit setUIMode(uiMode);
         timer->start(20);
     }
 }
@@ -83,13 +85,19 @@ void MyGraphicsView::endRound()
     if (UIMode::MANUALRUN == uiMode)
     {
         uiMode = UIMode::FREE;
+        emit setUIMode(uiMode);
         timer->stop();
     }
     else if (UIMode::AUTORUN == uiMode)
     {
         timer->stop();
-        gameboard->nextOper();
-        timer->start(20);
+        uiMode = UIMode::AUTOCALC;
+        emit setUIMode(uiMode);
+        gameboard->checkCalcResult();
+        if (!isSingleStep && UIMode::CALCOK == uiMode)
+        {
+            beginAutoRun();
+        }
     }
 }
 
@@ -98,6 +106,7 @@ void MyGraphicsView::beginAutoRun()
     if (UIMode::CALCOK == uiMode)
     {
         uiMode = UIMode::AUTORUN;
+        emit setUIMode(uiMode);
         gameboard->nextOper();
         timer->start(20);
     }
@@ -106,6 +115,7 @@ void MyGraphicsView::beginAutoRun()
 void MyGraphicsView::endAutoRun()
 {
     uiMode = UIMode::FREE;
+    emit setUIMode(uiMode);
 }
 
 void MyGraphicsView::beginAutoCalc()
@@ -113,6 +123,7 @@ void MyGraphicsView::beginAutoCalc()
     if (UIMode::FREE == uiMode)
     {
         uiMode = UIMode::AUTOCALC;
+        emit setUIMode(uiMode);
     }
 }
 
@@ -121,9 +132,7 @@ void MyGraphicsView::calcOK()
     if (UIMode::AUTOCALC == uiMode)
     {
         uiMode = UIMode::CALCOK;
-        uiMode = UIMode::AUTORUN;
-        gameboard->nextOper();
-        timer->start(20);
+        emit setUIMode(uiMode);
     }
 }
 
@@ -156,6 +165,22 @@ void MyGraphicsView::onBFS()
 void MyGraphicsView::onDFS()
 {
     gameboard->onDFS();
+}
+
+void MyGraphicsView::onBeginAutoRun()
+{
+    if (UIMode::CALCOK == uiMode)
+    {
+        uiMode = UIMode::AUTORUN;
+        emit setUIMode(uiMode);
+        gameboard->nextOper();
+        timer->start(20);
+    }
+}
+
+void MyGraphicsView::onSetSingleStep(bool isSingle)
+{
+    isSingleStep = isSingle;
 }
 
 void MyGraphicsView::onClose()

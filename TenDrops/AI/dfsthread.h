@@ -16,6 +16,8 @@
 #include <QVector>
 #include <QStack>
 #include <QSet>
+#include <QMap>
+#include <list>
 
 class DFSThread : public MyThread
 {
@@ -30,9 +32,10 @@ protected:
 private:
     State *traversal();
     void addToOpenList(State* newState);
+    void closedToOpen();
 
 private:
-    QVector<State*> open;
+    std::vector<State*> open;
     QSet<State*> closed;
 };
 

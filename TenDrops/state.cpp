@@ -29,6 +29,11 @@ unsigned int qHash(State* key)
     return hash;
 }
 
+bool compLess(State *lhs, State* rhs)
+{
+    return *lhs < *rhs;
+}
+
 State::State(char *buffer)
     : grids()
     , drops(nullptr)
@@ -37,6 +42,7 @@ State::State(char *buffer)
     , combo(0)
     , x(-1)
     , y(-1)
+    , h(0)
 {
     memcpy_s(grids, sizeof(grids), buffer, sizeof(grids));
 }
@@ -140,9 +146,26 @@ int State::getG()
     return g;
 }
 
+void State::calcH()
+{
+    h = 0;
+    for (int x = 0; x < 6; ++x)
+    {
+        for (int y = 0; y < 6; ++y)
+        {
+            int index = y * 6 + x;
+            int w = grids[index].dropSize();
+            if (w > 0)
+            {
+                h += 5 - w;
+            }
+        }
+    }
+}
+
 int State::getH()
 {
-    return 0;
+    return h;
 }
 
 int State::getF()
