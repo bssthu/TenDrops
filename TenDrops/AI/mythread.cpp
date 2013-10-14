@@ -19,11 +19,11 @@ MyThread::MyThread(int water, QObject *parent)
     , isExit(false)
     , openSize(0)
     , closedSize(0)
-    , water(water)
     , isSucceed(false)
-    , opers(nullptr)
+    , water(water)
     , steps(0)
     , stepsCompleted(0)
+    , opers(nullptr)
     , time(new QTime())
     , elapsedSec(0.0f)
 {
@@ -32,6 +32,7 @@ MyThread::MyThread(int water, QObject *parent)
 MyThread::~MyThread()
 {
     SAFE_DELETE_ARRAY(opers);
+    SAFE_DELETE(time);
     deleteElements();
 }
 
@@ -48,7 +49,7 @@ MyThread::Point MyThread::nextOper()
         pt.x = pt.y = -1;
         return pt;
     }
-    return opers[stepsCompleted++];
+    return opers[(int)stepsCompleted++];
 }
 
 void MyThread::traceBackState(State* state)

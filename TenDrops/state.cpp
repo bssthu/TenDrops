@@ -13,14 +13,14 @@
 #include "Macro.h"
 #include <drop.h>
 
-unsigned int qHash(State key)
+unsigned int qHash(State* key)
 {
     // Robert Sedgwicks, Algorithms in C
     unsigned int b = 378551;
     unsigned int a = 63689;
     unsigned int hash = 0;
     int buffer[36];
-    key.getDropsSize(buffer);
+    key->getDropsSize(buffer);
     for (int i = 0; i < 36; ++i)
     {
         hash = hash * a + buffer[i];
@@ -35,11 +35,18 @@ State::State(char *buffer)
     , prev(nullptr)
     , water(0)
     , combo(0)
-    , deep(0)
     , x(-1)
     , y(-1)
 {
     memcpy_s(grids, sizeof(grids), buffer, sizeof(grids));
+}
+
+void State::updateTo(State* state)
+{
+    prev = state->prev;
+    water = state->water;
+    x = state->x;
+    y = state->y;
 }
 
 bool State::operator ==(State& state)
@@ -72,10 +79,10 @@ State* State::addWater(int x, int y)
 
     State* newState = new State(*this);
     newState->drops = new QList<Drop*>[4];
-    newState->water = water - 1;
+    //newState->water = water - 1;
+    newState->water = 1;
     newState->combo = 0;
     newState->prev = this;
-    newState->deep = deep + 1;
     newState->x = x;
     newState->y = y;
     newState->grids[index].addDrop();
@@ -124,7 +131,13 @@ int State::getY()
 
 int State::getG()
 {
-    return deep;
+    int g = water;
+    State* state = this;
+    while ((state = state->prev) != nullptr)
+    {
+        g += state->water;
+    }
+    return g;
 }
 
 int State::getH()

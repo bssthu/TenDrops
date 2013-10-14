@@ -15,8 +15,9 @@
 
 DFSThread::DFSThread(State *state, int water, QObject *parent)
     : MyThread(water, parent)
+    , open()
+    , closed()
 {
-    state->setWater(water);
     open.push_back(state);
 }
 
@@ -51,8 +52,10 @@ State* DFSThread::traversal()
 {
     State* curState = open.last();
     open.pop_back();
-    closed.push_back(curState);
-    if (curState->getWater() <= 0)
+    closed.insert(curState);
+    closedSize++;
+    // 水不能为负
+    if (curState->getG() >= water)
     {
         return nullptr;
     }
@@ -82,22 +85,48 @@ void DFSThread::addToOpenList(State* newState)
         State* state = *it;
         if (*state == *newState)
         {
+            if (state->getG() > newState->getG())
+            {
+                state->updateTo(newState);
+            }
             SAFE_DELETE(newState);
             return;
         }
         ++it;
     }
-    for (QStack<State*>::iterator it = closed.begin(); it != closed.end(); )
+    if (closed.contains(newState))
     {
-        State* state = *it;
-        if (*state == *newState)
+        State* state = *closed.find(newState);
+        if (state->getG() > newState->getG())
         {
-            SAFE_DELETE(newState);
-            return;
+            state->updateTo(newState);
+            closed.remove(state);
+            open.push_back(state);
         }
-        ++it;
+        SAFE_DELETE(newState);
+        return;
     }
     open.push_back(newState);
+}
+
+void DFSThread::deleteElements()
+{
+    openSize = open.size();
+    for (QVector<State*>::iterator it = open.begin(); it != open.end(); )
+    {
+        State* state = *it;
+        ++it;
+        SAFE_DELETE(state);
+    }
+    open.clear();
+    closedSize = closed.size();
+    for (QSet<State*>::iterator it = closed.begin(); it != closed.end(); )
+    {
+        State* state = *it;
+        ++it;
+        SAFE_DELETE(state);
+    }
+    closed.clear();
 }
 
 QString DFSThread::getInfo()

@@ -90,5 +90,6 @@ void MainWindow::checkThreadInfo()
 
 void MainWindow::closeEvent(QCloseEvent* /*event*/)
 {
+    label->setText(label->text().append("; 正在关闭，请稍候"));
     ui->graphicsView->onClose();
 }

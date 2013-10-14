@@ -47,11 +47,11 @@ public:
 protected:
     int openSize;
     int closedSize;
-    int water;
     bool isSucceed;
+    char water;
+    char steps;
+    char stepsCompleted;
     Point* opers;
-    int steps;
-    int stepsCompleted;
     QTime* time;
     float elapsedSec;
 };

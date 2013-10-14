@@ -22,7 +22,6 @@ BFSThread::BFSThread(State* state, int water, QObject *parent)
     , deep(0)
     , isOutOfMemory(false)
 {
-    state->setWater(water);
     open.insert(state);
 }
 
@@ -70,13 +69,13 @@ State* BFSThread::traversal()
             return nullptr;
         }
         State* curState = *it;
-//        if (curState->getG() > deep)    // 保证是严格的宽度优先搜索
-//        {
-//            ++it;
-//            continue;
-//        }
+        if (curState->getG() > deep)    // 保证是严格的宽度优先搜索
+        {
+            ++it;
+            continue;
+        }
         // 水不能为负
-        if (curState->getWater() <= 0)
+        if (curState->getG() >= water)
         {
             it = open.erase(it);
             closed.insert(curState);

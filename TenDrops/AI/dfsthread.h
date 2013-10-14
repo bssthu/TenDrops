@@ -15,6 +15,7 @@
 #include <QList>
 #include <QVector>
 #include <QStack>
+#include <QSet>
 
 class DFSThread : public MyThread
 {
@@ -24,6 +25,7 @@ public:
 
 protected:
     void run();
+    void deleteElements();
 
 private:
     State *traversal();
@@ -31,7 +33,7 @@ private:
 
 private:
     QVector<State*> open;
-    QStack<State*> closed;
+    QSet<State*> closed;
 };
 
 #endif // DFSTHREAD_H

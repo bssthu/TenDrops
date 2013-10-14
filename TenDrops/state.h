@@ -17,12 +17,13 @@
 class Drop;
 class State;
 
-unsigned int qHash(State key);
+unsigned int qHash(State *key);
 
 class State
 {
 public:
     explicit State(char *buffer);
+    void updateTo(State* state);
 
     // compare drop size
     bool operator ==(State& state);
@@ -53,10 +54,9 @@ private:
     Grid grids[36];
     QList<Drop*>* drops;
     State* prev;
-    int water;
-    int combo;
-    int deep;
-    int x, y;
+    char water;
+    char combo;
+    char x, y;
 };
 
 #endif // STATE_H
