@@ -30,7 +30,7 @@ public:
 
 signals:
     void loadMap(const char* filename);
-    void saveMap();
+    void saveMap(const char* filename);
     void sigDebug(void* bug);
     void bfs();
     void dfs();
@@ -43,19 +43,20 @@ private slots:
     void on_runPushButton_clicked();
     void on_stepRadioButton_toggled();
     void on_abortPushButton_clicked();
-    void on_debugPushButton_clicked();
     void on_exitAction_triggered();
     void on_aboutAction_triggered();
 
     void checkThreadInfo();
 
     void onSetUIMode(MyGraphicsView::UIMode uiMode);
+    void toNextLevel();
 
 protected:
     void closeEvent(QCloseEvent* event);
 
 private:
     void initUI();
+    void loadMapLevel(int level);
 
 private:
     Ui::MainWindow *ui;

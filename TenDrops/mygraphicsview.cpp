@@ -98,6 +98,11 @@ void MyGraphicsView::endRound()
         {
             beginAutoRun();
         }
+        else if (UIMode::FREE == uiMode)    // finish round
+        {
+            gameboard->toNextLevel();
+            emit toNextLevel();
+        }
     }
 }
 
@@ -141,9 +146,9 @@ void MyGraphicsView::onLoadMap(const char* filename)
     gameboard->onLoadMap(filename);
 }
 
-void MyGraphicsView::onSaveMap()
+void MyGraphicsView::onSaveMap(const char* filename)
 {
-    gameboard->onSaveMap();
+    gameboard->onSaveMap(filename);
 }
 
 void MyGraphicsView::onDebug(void*)

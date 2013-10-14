@@ -148,6 +148,10 @@ int State::getG()
 
 #ifndef H_NEAR_DROP
 #define H_NEAR_DROP(w)  \
+    if (w > 0)  \
+    {  \
+        lineEmpty = false;  \
+    }  \
     if (w < 3) \
     { \
         h += 1; \
@@ -171,25 +175,45 @@ void State::calcH()
             if (w > 0)
             {
                 h += 5 - w;
+                bool lineEmpty = true;
                 for (int x1 = x - 1; x1 >= 0; --x1)
                 {
                     w = grids[y * 6 + x1].dropSize();
                     H_NEAR_DROP(w);
                 }
+                if (lineEmpty)
+                {
+                    h += 1;
+                }
+                lineEmpty = true;
                 for (int x1 = x + 1; x1 < 6; ++x1)
                 {
                     w = grids[y * 6 + x1].dropSize();
                     H_NEAR_DROP(w);
                 }
+                if (lineEmpty)
+                {
+                    h += 1;
+                }
+                lineEmpty = true;
                 for (int y1 = y - 1; y1 >= 0; --y1)
                 {
                     w = grids[y1 * 6 + x].dropSize();
                     H_NEAR_DROP(w);
                 }
+                if (lineEmpty)
+                {
+                    h += 1;
+                }
+                lineEmpty = true;
                 for (int y1 = y + 1; y1 < 6; ++y1)
                 {
                     w = grids[y1 * 6 + x].dropSize();
                     H_NEAR_DROP(w);
+                }
+                if (lineEmpty)
+                {
+                    h += 1;
                 }
             }
         }

@@ -29,7 +29,7 @@ public:
 
     void onClicked(const QPointF* point);
     void onLoadMap(const char* filename);
-    void onSaveMap();
+    void onSaveMap(const char *filename);
     void onBFS();
     void onDFS();
 
@@ -37,6 +37,8 @@ public:
     void abortThread();
     QString checkThreadInfo();
     void checkCalcResult();
+
+    void toNextLevel();
 
 signals:
     void updated();

@@ -68,10 +68,16 @@ void DFSThread::run()
 
 State* DFSThread::traversal()
 {
-    std::partial_sort(open.begin(), open.begin() + 1, open.end(), compLess);
-    std::vector<State*>::iterator it = open.begin();
-    State* curState = *it;
-    //open.erase(it);
+    std::list<State*>::iterator itMin = open.begin();
+    for (std::list<State*>::iterator it = open.begin(); it != open.end(); ++it)
+    {
+        if (*itMin < *it)
+        {
+            itMin = it;
+        }
+    }
+    State* curState = *itMin;
+    open.erase(itMin);
     closed.insert(curState);
     // 水不能为负
     if (curState->getG() >= deep)
@@ -99,7 +105,7 @@ State* DFSThread::traversal()
 
 void DFSThread::addToOpenList(State* newState)
 {
-    for (std::vector<State*>::iterator it = open.begin(); it != open.end(); )
+    for (std::list<State*>::iterator it = open.begin(); it != open.end(); )
     {
         State* state = *it;
         if (*state == *newState)
@@ -143,7 +149,7 @@ void DFSThread::closedToOpen()
 void DFSThread::deleteElements()
 {
     openSize = open.size();
-    for (std::vector<State*>::iterator it = open.begin(); it != open.end(); )
+    for (std::list<State*>::iterator it = open.begin(); it != open.end(); )
     {
         State* state = *it;
         ++it;

@@ -36,6 +36,7 @@ void MainWindow::initUI()
     setWindowIcon(QIcon("://Data//icon.ico"));
     ui->statusBar->addWidget(modeLabel);
     ui->statusBar->addWidget(infoLabel);
+    ui->levelSpinBox->setMinimum(1);
     onSetUIMode(MyGraphicsView::UIMode::FREE);
 
     connect(this, &MainWindow::loadMap, ui->graphicsView, &MyGraphicsView::onLoadMap);
@@ -46,16 +47,27 @@ void MainWindow::initUI()
     connect(timer, &QTimer::timeout, ui->graphicsView, &MyGraphicsView::checkThreadResult);
     connect(timer, &QTimer::timeout, this, &MainWindow::checkThreadInfo);
     connect(ui->graphicsView, &MyGraphicsView::setUIMode, this, &MainWindow::onSetUIMode);
+    connect(ui->graphicsView, &MyGraphicsView::toNextLevel, this, &MainWindow::toNextLevel);
+
+    loadMapLevel(1);
+}
+
+void MainWindow::loadMapLevel(int level)
+{
+    QString filename = QString("Data//Maps//%1.map").arg(level);
+    emit loadMap(filename.toLocal8Bit().data());
 }
 
 void MainWindow::on_loadPushButton_clicked()
 {
-    emit loadMap("Data//Maps//1.map");
+    loadMapLevel(ui->levelSpinBox->value());
 }
 
 void MainWindow::on_savePushButton_clicked()
 {
-    emit saveMap();
+    QString num = ui->levelSpinBox->text();
+    QString filename = QString("Data//Maps//%1.map").arg(num);
+    emit saveMap(filename.toLocal8Bit().data());
 }
 
 void MainWindow::on_bfsPushButton_clicked()
@@ -81,11 +93,6 @@ void MainWindow::on_stepRadioButton_toggled()
 void MainWindow::on_abortPushButton_clicked()
 {
     ui->graphicsView->abortThread();
-}
-
-void MainWindow::on_debugPushButton_clicked()
-{
-    emit sigDebug(nullptr);
 }
 
 void MainWindow::on_exitAction_triggered()
@@ -156,6 +163,13 @@ void MainWindow::onSetUIMode(MyGraphicsView::UIMode uiMode)
         modeLabel->setText("??　　　");
         break;
     }
+}
+
+void MainWindow::toNextLevel()
+{
+    int nextLv = ui->levelSpinBox->value() + 1;
+    ui->levelSpinBox->setValue(nextLv);
+    loadMapLevel(nextLv);
 }
 
 void MainWindow::closeEvent(QCloseEvent* /*event*/)

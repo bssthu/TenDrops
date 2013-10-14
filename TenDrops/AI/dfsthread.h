@@ -35,7 +35,7 @@ private:
     void closedToOpen();
 
 private:
-    std::vector<State*> open;
+    std::list<State*> open;
     QSet<State*> closed;
 };
 

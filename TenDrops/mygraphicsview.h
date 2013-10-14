@@ -33,6 +33,7 @@ public:
 
 signals:
     void setUIMode(MyGraphicsView::UIMode uiMode);
+    void toNextLevel();
 
 public slots:
     virtual void mousePressEvent(QMouseEvent *event);
@@ -46,7 +47,7 @@ public slots:
     void calcOK();
 
     void onLoadMap(const char* filename);
-    void onSaveMap();
+    void onSaveMap(const char* filename);
     void onDebug(void*);
     void onSetDropsLeft(int dropNum);
     void onBFS();

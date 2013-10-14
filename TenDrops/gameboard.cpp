@@ -113,7 +113,7 @@ void GameBoard::onLoadMap(const char* filename)
     emit updated();
 }
 
-void GameBoard::onSaveMap()
+void GameBoard::onSaveMap(const char* filename)
 {
     char buffer[36];
     for (int x = 0; x < 6; ++x)
@@ -123,7 +123,7 @@ void GameBoard::onSaveMap()
             buffer[y * 6 + x] = grids[y * 6 + x]->dropSize();
         }
     }
-    MapReader::saveMap("Data//Maps//1.map", buffer);
+    MapReader::saveMap(filename, buffer);
 }
 
 void GameBoard::onBFS()
@@ -268,7 +268,14 @@ void GameBoard::abortThread()
     if (nullptr != thread)
     {
         thread->isExit = true;
-        thread->wait();
+        if (!thread->wait(5000))
+        {
+            try
+            {
+                thread->terminate();
+            }
+            catch (...) { }
+        }
         SAFE_DELETE(thread);
         emit endAutoRun();
     }
@@ -306,4 +313,9 @@ void GameBoard::checkCalcResult()
             emit endAutoRun();
         }
     }
+}
+
+void GameBoard::toNextLevel()
+{
+    emit setDropsLeft(++water);
 }
