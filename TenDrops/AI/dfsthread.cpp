@@ -28,6 +28,7 @@ void DFSThread::run()
     State* finalState = nullptr;
     for (deep = water; deep <= water && nullptr == finalState; ++deep)
     {
+        closedToOpen();
         do
         {
             finalState = traversal();
@@ -50,11 +51,12 @@ void DFSThread::run()
             deleteElements();
             return;
         }
-
-        if (nullptr == finalState)
-        {
-            closedToOpen();
-        }
+    }
+    if (nullptr == finalState)
+    {
+        isSucceed = true;
+        deleteElements();
+        return;
     }
 
     traceBackState(finalState);
@@ -66,9 +68,10 @@ void DFSThread::run()
 
 State* DFSThread::traversal()
 {
-    std::sort(open.begin(), open.end(), compLess);
-    State* curState = open[open.size() - 1];
-    open.pop_back();
+    std::partial_sort(open.begin(), open.begin() + 1, open.end(), compLess);
+    std::vector<State*>::iterator it = open.begin();
+    State* curState = *it;
+    //open.erase(it);
     closed.insert(curState);
     // 水不能为负
     if (curState->getG() >= deep)
