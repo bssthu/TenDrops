@@ -13,11 +13,7 @@
 
 #include "mythread.h"
 #include <QList>
-#include <QVector>
-#include <QStack>
 #include <QSet>
-#include <QMap>
-#include <list>
 
 class DFSThread : public MyThread
 {

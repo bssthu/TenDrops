@@ -176,6 +176,10 @@ QString DFSThread::getInfo()
     }
     QString str = QString("open=%1; closed=%2; round=%3; elapsed=%4s")
             .arg(openSize).arg(closedSize).arg(deep).arg(elapsedSec);
+    if (isOutOfMemory)
+    {
+        str.append("; 内存使用过多，终止搜索");
+    }
     if (0 == openSize && isSucceed)
     {
         str.append("; 已遍历所有情况，无解");

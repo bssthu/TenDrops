@@ -53,3 +53,4 @@ RC_FILE += \
 
 OTHER_FILES += \
     resource.rc
+

@@ -148,7 +148,7 @@ QString BFSThread::getInfo()
             .arg(openSize).arg(closedSize).arg(deep).arg(elapsedSec);
     if (isOutOfMemory)
     {
-        str.append("; 内存耗尽，无解");
+        str.append("; 内存使用过多，终止搜索");
     }
     if (0 == openSize && isSucceed)
     {
