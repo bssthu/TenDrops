@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-14
+// Last Modification: 2013-10-16
 // Description		:
 //
 
@@ -29,6 +29,8 @@ GameBoard::GameBoard(QGraphicsScene *scene, QObject *parent)
     , thread(nullptr)
 {
     createGrids();
+    GridGraphics::initImg();
+    DropGraphics::initImg();
 }
 
 GameBoard::~GameBoard()
@@ -261,6 +263,12 @@ void GameBoard::addDrops(int x, int y)
         drops[i].push_back(drop);
         scene->addItem(drop);
     }
+}
+
+void GameBoard::cheat()
+{
+    water += 10;
+    emit setDropsLeft(water);
 }
 
 void GameBoard::abortThread()

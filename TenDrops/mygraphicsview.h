@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-14
+// Last Modification: 2013-10-15
 // Description		: My QGraphicsView.
 //
 
@@ -58,6 +58,7 @@ public slots:
     void onClose();
     QString checkThreadInfo();
     void checkThreadResult();
+    void cheat();
     void abortThread();
 
 private:

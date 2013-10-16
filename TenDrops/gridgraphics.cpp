@@ -4,21 +4,14 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-10
-// Last Modification: 2013-10-14
+// Last Modification: 2013-10-16
 // Description		:
 //
 
 #include "gridgraphics.h"
 #include <qpainter.h>
 
-QImage GridGraphics::img[] =
-{
-    QImage(),
-    QImage("://Data//Textures//water1.png"),
-    QImage("://Data//Textures//water2.png"),
-    QImage("://Data//Textures//water3.png"),
-    QImage("://Data//Textures//water4.png"),
-};
+QImage GridGraphics::img[5];
 
 GridGraphics::GridGraphics(int x, int y)
     : Grid()
@@ -35,6 +28,14 @@ QRectF GridGraphics::boundingRect() const
 void GridGraphics::paint(QPainter *painter, const QStyleOptionGraphicsItem */*option*/, QWidget */*widget*/)
 {
     painter->drawImage(boundingRect(), img[(int)dropSize_]);
+}
+
+void GridGraphics::initImg()
+{
+    for (int i = 1; i <= 4; ++i)
+    {
+        img[i].load(QString("://Data//Textures//water%1.png").arg(i));
+    }
 }
 
 int GridGraphics::getCoordX(float x)

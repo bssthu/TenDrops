@@ -4,14 +4,14 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-10
-// Last Modification: 2013-10-10
+// Last Modification: 2013-10-16
 // Description		: Graphics of drop.
 //
 
 #include "dropgraphics.h"
 #include <QPainter>
 
-QImage DropGraphics::img("://Data//Textures//drop.png");
+QImage DropGraphics::img;
 
 const float DropGraphics::ROT[] =
 {
@@ -58,4 +58,9 @@ void DropGraphics::step()
 void DropGraphics::move(float percent)
 {
     movePercent += percent;
+}
+
+void DropGraphics::initImg()
+{
+    img.load("://Data//Textures//drop.png");
 }

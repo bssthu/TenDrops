@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-10
-// Last Modification: 2013-10-13
+// Last Modification: 2013-10-16
 // Description		: Graphics of drop.
 //
 
@@ -26,6 +26,8 @@ public:
 
     void step();
     void move(float percent);
+
+    static void initImg();
 
 private:
     static QImage img;

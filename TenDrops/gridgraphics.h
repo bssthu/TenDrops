@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-10
-// Last Modification: 2013-10-10
+// Last Modification: 2013-10-16
 // Description		: A grid in board. Can contain a drop of water.
 //
 
@@ -23,6 +23,7 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+    static void initImg();
     static int getCoordX(float x);
     static int getCoordY(float y);
 

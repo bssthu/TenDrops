@@ -44,7 +44,7 @@ State::State(char *buffer)
     , y(-1)
     , h(0)
 {
-    memcpy_s(grids, sizeof(grids), buffer, sizeof(grids));
+    memcpy(grids, buffer, sizeof(grids));
 }
 
 void State::updateTo(State* state)
@@ -181,31 +181,16 @@ void State::calcH()
                     w = grids[y * 6 + x1].dropSize();
                     H_NEAR_DROP(w);
                 }
-                if (lineEmpty)
-                {
-                    h += 1;
-                }
-                lineEmpty = true;
                 for (int x1 = x + 1; x1 < 6; ++x1)
                 {
                     w = grids[y * 6 + x1].dropSize();
                     H_NEAR_DROP(w);
                 }
-                if (lineEmpty)
-                {
-                    h += 1;
-                }
-                lineEmpty = true;
                 for (int y1 = y - 1; y1 >= 0; --y1)
                 {
                     w = grids[y1 * 6 + x].dropSize();
                     H_NEAR_DROP(w);
                 }
-                if (lineEmpty)
-                {
-                    h += 1;
-                }
-                lineEmpty = true;
                 for (int y1 = y + 1; y1 < 6; ++y1)
                 {
                     w = grids[y1 * 6 + x].dropSize();

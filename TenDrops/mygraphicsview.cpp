@@ -206,6 +206,11 @@ void MyGraphicsView::checkThreadResult()
     }
 }
 
+void MyGraphicsView::cheat()
+{
+    gameboard->cheat();
+}
+
 void MyGraphicsView::abortThread()
 {
     gameboard->abortThread();

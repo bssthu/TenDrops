@@ -57,7 +57,7 @@
      <string>(&amp;A)bort</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="rightLayoutWidget">
     <property name="geometry">
      <rect>
       <x>550</x>
@@ -66,7 +66,7 @@
       <height>171</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="upVerticalLayout">
      <item>
       <widget class="QSpinBox" name="levelSpinBox"/>
      </item>
@@ -100,7 +100,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>550</x>
@@ -109,7 +109,7 @@
       <height>81</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <layout class="QVBoxLayout" name="runVerticalLayout">
      <item>
       <widget class="QPushButton" name="runPushButton">
        <property name="text">
@@ -136,17 +136,24 @@
      </item>
     </layout>
    </widget>
+   <widget class="QPushButton" name="cheatPushButton">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>320</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>(&amp;C)heat</string>
+    </property>
+   </widget>
+   <zorder>layoutWidget</zorder>
+   <zorder>layoutWidget</zorder>
    <zorder>graphicsView</zorder>
-   <zorder>loadPushButton</zorder>
-   <zorder>savePushButton</zorder>
-   <zorder>bfsPushButton</zorder>
    <zorder>abortPushButton</zorder>
-   <zorder>dfsPushButton</zorder>
-   <zorder>runPushButton</zorder>
-   <zorder>stepRadioButton</zorder>
-   <zorder>contRadioButton</zorder>
-   <zorder>levelSpinBox</zorder>
-   <zorder>runPushButton</zorder>
+   <zorder>cheatPushButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

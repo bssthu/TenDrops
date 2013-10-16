@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-09
-// Last Modification: 2013-10-13
+// Last Modification: 2013-10-15
 // Description		: Game controller.
 //
 
@@ -34,6 +34,7 @@ public:
     void onDFS();
 
     void nextOper();
+    void cheat();
     void abortThread();
     QString checkThreadInfo();
     void checkCalcResult();

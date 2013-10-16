@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-08
-// Last Modification: 2013-10-14
+// Last Modification: 2013-10-15
 // Description		: Game controller.
 //
 
@@ -42,6 +42,7 @@ private slots:
     void on_dfsPushButton_clicked();
     void on_runPushButton_clicked();
     void on_stepRadioButton_toggled();
+    void on_cheatPushButton_clicked();
     void on_abortPushButton_clicked();
     void on_exitAction_triggered();
     void on_aboutAction_triggered();

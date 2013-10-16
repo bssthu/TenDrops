@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-11
-// Last Modification: 2013-10-14
+// Last Modification: 2013-10-16
 // Description		:
 //
 
@@ -14,7 +14,7 @@
 bool MapReader::readMap(const char *filename, char* buffer)
 {
     FILE* fp = nullptr;
-    fopen_s(&fp, filename, "rt");
+    fp = fopen(filename, "rt");
     if (nullptr == fp)
     {
         return false;
@@ -38,7 +38,7 @@ bool MapReader::readMap(const char *filename, char* buffer)
 void MapReader::saveMap(const char *filename, char *buffer)
 {
     FILE* fp = nullptr;
-    fopen_s(&fp, filename, "wt");
+    fp = fopen(filename, "wt");
     if (nullptr == fp)
     {
         return;

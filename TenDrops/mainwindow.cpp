@@ -4,7 +4,7 @@
 // Project			: TenDrops
 // State			:
 // Creation Date	: 2013-10-08
-// Last Modification: 2013-10-14
+// Last Modification: 2013-10-15
 // Description		:
 //
 
@@ -88,6 +88,11 @@ void MainWindow::on_runPushButton_clicked()
 void MainWindow::on_stepRadioButton_toggled()
 {
     ui->graphicsView->onSetSingleStep(ui->stepRadioButton->isChecked());
+}
+
+void MainWindow::on_cheatPushButton_clicked()
+{
+    ui->graphicsView->cheat();
 }
 
 void MainWindow::on_abortPushButton_clicked()
